@@ -1,5 +1,5 @@
 return {
 	"m4xshen/smartcolumn.nvim",
-	events = { "VeryLazy" },
-	opts = {},
+	event = { "VeryLazy" },
+	opts = true,
 }

@@ -1,6 +1,6 @@
 return {
 	"christoomey/vim-tmux-navigator",
-	event = "VeryLazy",
+	event = { "VeryLazy" },
 	cmd = {
 		"TmuxNavigateLeft",
 		"TmuxNavigateDown",
