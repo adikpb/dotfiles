@@ -29,7 +29,7 @@ vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
 
 -- python nvim virtaulenv
-vim.g.python3_host_prog = os.getenv("HOME") .. "/.pyenv/versions/nvim/bin/python"
+vim.g.python3_host_prog = os.getenv("HOME") .. ".local/venvs/pynvim/bin/python"
 vim.g.loaded_node_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
