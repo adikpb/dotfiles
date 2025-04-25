@@ -4,7 +4,7 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"sindrets/diffview.nvim",
-		"folke/snacks",
+		"folke/snacks.nvim",
 	},
 	keys = { { "<leader>gg", "<cmd>Neogit<cr>", desc = "[N]eo [G]it" } },
 	config = true,

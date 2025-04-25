@@ -3,8 +3,8 @@ return {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons",
-		"folke/snacks",
+		"folke/snacks.nvim",
 	},
 	keys = { { "<leader>o", "<cmd>Octo actions<cr>", desc = "[O]cto" } },
-	opts = { backend = "snacks" },
+	opts = { picker = "snacks" },
 }
