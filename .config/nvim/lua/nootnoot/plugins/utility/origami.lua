@@ -1,5 +1,5 @@
 return {
 	"chrisgrieser/nvim-origami",
-	event = { "VeryLazy" },
+	event = { "BufReadPre", "BufReadPost" },
 	opts = true,
 }

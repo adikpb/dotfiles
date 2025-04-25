@@ -1,6 +1,6 @@
 return {
 	"folke/lazydev.nvim",
-	ft = "lua", -- only load on lua files
+	ft = "lua",
 	opts = {
 		lspconfig = true,
 		cmp = true,
