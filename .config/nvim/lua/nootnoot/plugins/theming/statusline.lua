@@ -1,28 +1,23 @@
 return {
 	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons", "folke/noice.nvim" },
+	dependencies = { "nvim-tree/nvim-web-devicons" },
 	event = { "VeryLazy" },
 	opts = {
 		sections = {
 			lualine_a = {
-				"mode",
 				{
-					---@diagnostic disable-next-line: undefined-field, deprecated
-					require("noice").api.statusline.mode.get,
-					---@diagnostic disable-next-line: undefined-field, deprecated
-					cond = require("noice").api.statusline.mode.has,
+					"mode",
 					fmt = function(str)
-						return str:gsub("--%s.*%s--", "")
+						return string.sub(str, 1, 3)
 					end,
 				},
-			},
-			lualine_z = {
-				"location",
 				{
-					---@diagnostic disable-next-line: undefined-field, deprecated
-					require("noice").api.statusline.showcmd.get,
-					---@diagnostic disable-next-line: undefined-field, deprecated
-					cond = require("noice").api.statusline.showcmd.has,
+					function()
+						return "rec. @" .. vim.fn.reg_recording()
+					end,
+					cond = function()
+						return vim.fn.reg_recording() ~= ""
+					end,
 				},
 			},
 		},
