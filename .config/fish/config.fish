@@ -6,9 +6,6 @@ set -gx JAVA_HOME (/usr/libexec/java_home)
 # starship
 starship init fish | source
 
-# Set up fzf key bindings
-fzf --fish | source
-
 # cargo
 fish_add_path ~/.cargo/bin
 
