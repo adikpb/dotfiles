@@ -3,12 +3,11 @@ return {
 	version = "*",
 	dependencies = "nvim-tree/nvim-web-devicons",
 	event = { "VeryLazy" },
+	---@type bufferline.UserConfig
 	opts = {
 		options = {
 			mode = "buffers", -- set to "tabs" to only show tabpages instead
-			indicator = {
-				style = "underline",
-			},
+			numbers = "buffer_id",
 			diagnostics = "nvim_lsp",
 			-- offsets = {
 			--     {
@@ -20,12 +19,11 @@ return {
 			-- },
 			-- can also be a table containing 2 custom separators
 			-- [focused and unfocused]. eg: { '|', '|' }
-			separator_style = "slant", -- | "slope" | "thick" | "thin" | { "any", "any" }
 		},
 	},
 	config = function(_, opts)
 		local bufferline = require("bufferline")
-		opts.options.style = bufferline.style_preset.minimal
+		opts.options.style_preset = bufferline.style_preset.minimal
 		bufferline.setup(opts)
 	end,
 }
