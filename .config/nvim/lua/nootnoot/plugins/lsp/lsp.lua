@@ -55,87 +55,46 @@ return {
 	cmd = { "LspInfo", "LspInstall", "LspUninstall", "Mason" },
 	dependencies = {
 		{
-			"hrsh7th/nvim-cmp",
+			"saghen/blink.cmp",
 			dependencies = {
-				-- Sources
-				"hrsh7th/cmp-path",
-				"hrsh7th/cmp-nvim-lsp",
-				"petertriho/cmp-git",
-				-- Snippets
+				"rafamadriz/friendly-snippets",
 				{
-					"L3MON4D3/LuaSnip",
-					version = "v2.*",
-					dependencies = { "rafamadriz/friendly-snippets" },
-					config = function()
-						require("luasnip.loaders.from_vscode").lazy_load()
-					end,
-					build = "make install_jsregexp",
+					"Kaiser-Yang/blink-cmp-git",
+					dependencies = { "nvim-lua/plenary.nvim" },
 				},
-				"saadparwaiz1/cmp_luasnip", -- luasnip completions
-				"onsails/lspkind.nvim", -- vscode like pictograms
-				"lukas-reineke/cmp-under-comparator", -- dunder completions later
 			},
-			config = function()
-				local cmp = require("cmp")
-				local lspkind = require("lspkind")
-				local luasnip = require("luasnip")
-
-				cmp.setup({
-					snippet = {
-						expand = function(args)
-							luasnip.lsp_expand(args.body)
-						end,
+			version = "1.*",
+			---@module 'blink.cmp'
+			---@type blink.cmp.Config
+			opts = {
+				keymap = { preset = "enter" },
+				completion = {
+					documentation = { window = { border = "rounded" } },
+					ghost_text = { enabled = true },
+					menu = { auto_show = true, border = "rounded" },
+				},
+				cmdline = {
+					completion = {
+						ghost_text = { enabled = true },
+						menu = { auto_show = true },
+						list = { selection = { preselect = false } },
 					},
-					mapping = cmp.mapping.preset.insert({
-						["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
-						["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
-						["<C-b>"] = cmp.mapping.scroll_docs(-4),
-						["<C-f>"] = cmp.mapping.scroll_docs(4),
-						["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
-						["<C-e>"] = cmp.mapping.abort(), -- close completion window
-						["<CR>"] = cmp.mapping.confirm({ select = true }),
-						["<C-l>"] = cmp.mapping(function()
-							if luasnip.expand_or_locally_jumpable() then
-								luasnip.expand_or_jump()
-							end
-						end, { "i", "s" }),
-						["<C-h>"] = cmp.mapping(function()
-							if luasnip.locally_jumpable(-1) then
-								luasnip.jump(-1)
-							end
-						end, { "i", "s" }),
-					}),
-					sources = cmp.config.sources({
-						{ name = "luasnip" }, -- snippets
-						{ name = "nvim_lsp" },
-						{ name = "git" },
-						{ name = "path" }, -- file system paths
-					}),
-					formatting = {
-						format = lspkind.cmp_format({
-							maxwidth = 50,
-							ellipsis_char = "...",
-						}),
-					},
-					sorting = {
-						comparators = {
-							cmp.config.compare.offset,
-							cmp.config.compare.exact,
-							cmp.config.compare.score,
-							require("cmp-under-comparator").under,
-							cmp.config.compare.kind,
-							cmp.config.compare.sort_text,
-							cmp.config.compare.length,
-							cmp.config.compare.order,
+				},
+				sources = {
+					default = { "lazydev", "lsp", "path", "snippets", "git", "buffer" },
+					providers = {
+						lazydev = {
+							name = "LazyDev",
+							module = "lazydev.integrations.blink",
+							score_offset = 100,
+						},
+						git = {
+							module = "blink-cmp-git",
+							name = "Git",
 						},
 					},
-					experimental = { ghost_text = true },
-				})
-			end,
-		},
-		{
-			"windwp/nvim-autopairs",
-			opts = true,
+				},
+			},
 		},
 		{ "williamboman/mason.nvim", opts = true },
 		"williamboman/mason-lspconfig.nvim",
@@ -168,54 +127,28 @@ return {
 		},
 	},
 	config = function()
-		local cmp = require("cmp")
-		local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		local lspconfig = require("lspconfig")
+		local blink_cmp = require("blink.cmp")
 		local mason = require("mason")
 		local mason_lspconfig = require("mason-lspconfig")
 		local mason_tool_installer = require("mason-tool-installer")
-
-		cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = function(ev)
 				vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
-				-- Buffer local mappings.
-				-- See `:help vim.lsp.*` for documentation on any of the below functions
-				local opts = { buffer = ev.buf, silent = true }
-
-				-- set keybinds
-				opts.desc = "Show LSP References"
-				vim.keymap.set("n", "grr", "<cmd>Telescope lsp_references<CR>", opts)
-				opts.desc = "Show LSP Definitions"
-				vim.keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
-				opts.desc = "Smart Rename"
-				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-				opts.desc = "Code Actions"
-				vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
-				opts.desc = "Restart LSP"
-				vim.keymap.set("n", "<leader>lrs", ":LspRestart<CR>", opts)
 			end,
 		})
 
-		local capabilities = vim.tbl_deep_extend(
-			"force",
-			{},
-			vim.lsp.protocol.make_client_capabilities(),
-			cmp_nvim_lsp.default_capabilities()
-		)
-		capabilities.textDocument.foldingRange = {
-			dynamicRegistration = false,
-			lineFoldingOnly = true,
-		}
-
-		vim.notify(
-			"Install List: " .. vim.inspect(ensure_installed),
-			vim.log.levels.DEBUG,
-			{ title = "lua/nootnoot/plugins/lsp.lua" }
-		)
+		local capabilities = vim.lsp.protocol.make_client_capabilities()
+		capabilities = vim.tbl_deep_extend("force", capabilities, blink_cmp.get_lsp_capabilities())
+		capabilities = vim.tbl_deep_extend("force", capabilities, {
+			textDocument = {
+				foldingRange = {
+					dynamicRegistration = false,
+					lineFoldingOnly = true,
+				},
+			},
+		})
 
 		mason_tool_installer.setup({
 			auto_update = true,
@@ -236,8 +169,9 @@ return {
 					-- This handles overriding only values explicitly passed
 					-- by the server configuration above. Useful when disabling
 					-- certain features of an LSP (for example, turning off formatting for tsserver)
-					server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-					lspconfig[server_name].setup(server)
+					server.capabilities = vim.tbl_deep_extend("force", {}, server.capabilities or {}, capabilities)
+					vim.lsp.config(server_name, server)
+					vim.lsp.enable(server_name)
 				end,
 			},
 		})
