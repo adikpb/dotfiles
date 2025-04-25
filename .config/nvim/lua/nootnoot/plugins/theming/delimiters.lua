@@ -1,5 +1,3 @@
----@module "lazy.types"
----@type LazyPluginSpec
 return {
 	url = "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
 	main = "rainbow-delimiters.setup",
@@ -7,13 +5,14 @@ return {
 	event = { "BufReadPre", "BufReadPost" },
 	opts = {
 		highlight = {
-			"RainbowDelimiterRed",
-			"RainbowDelimiterYellow",
-			"RainbowDelimiterBlue",
-			"RainbowDelimiterOrange",
-			"RainbowDelimiterGreen",
-			"RainbowDelimiterViolet",
-			"RainbowDelimiterCyan",
+			"SnacksIndentScope1",
+			"SnacksIndentScope2",
+			"SnacksIndentScope3",
+			"SnacksIndentScope4",
+			"SnacksIndentScope5",
+			"SnacksIndentScope6",
+			"SnacksIndentScope7",
+			"SnacksIndentScope8",
 		},
 	},
 }

@@ -5,7 +5,52 @@ return {
 	---@type snacks.Config
 	opts = {
 		bigfile = { enabled = true },
-		indent = { enabled = true },
+		indent = {
+			enabled = true,
+			indent = {
+				hl = {
+					"SnacksIndent1",
+					"SnacksIndent2",
+					"SnacksIndent3",
+					"SnacksIndent4",
+					"SnacksIndent5",
+					"SnacksIndent6",
+					"SnacksIndent7",
+					"SnacksIndent8",
+				},
+			},
+			scope = {
+				hl = {
+					"SnacksIndentScope1",
+					"SnacksIndentScope2",
+					"SnacksIndentScope3",
+					"SnacksIndentScope4",
+					"SnacksIndentScope5",
+					"SnacksIndentScope6",
+					"SnacksIndentScope7",
+					"SnacksIndentScope8",
+				},
+			},
+			config = function(opts, _)
+				local tokyonight_util = require("tokyonight.util")
+				local indent_hls = opts.indent.hl
+				local scope_hls = opts.scope.hl
+
+				for i, _ in ipairs(indent_hls) do
+					---@type vim.api.keyset.highlight
+					---@diagnostic disable-next-line: assign-type-mismatch
+					local hl = vim.api.nvim_get_hl(0, { name = indent_hls[i] })
+					local hl_fg = string.format("#%x", hl.fg)
+
+					hl.fg = hl_fg
+					vim.api.nvim_set_hl(0, scope_hls[i], hl)
+
+					hl_fg = tokyonight_util.darken(hl_fg, 0.05)
+					hl.fg = hl_fg
+					vim.api.nvim_set_hl(0, indent_hls[i], hl)
+				end
+			end,
+		},
 		input = { enabled = true },
 		notifier = {
 			enabled = true,
@@ -20,7 +65,6 @@ return {
 			},
 		},
 		quickfile = { enabled = true },
-		scope = { enabled = true },
 		scroll = { enabled = true },
 	},
 	keys = {
