@@ -14,21 +14,6 @@ local servers = {
 			},
 		},
 	},
-	marksman = {},
-	pyright = {
-		settings = {
-			python = {
-				analysis = {
-					diagnosticMode = "workspace",
-				},
-			},
-		},
-	},
-	ruff = {
-		on_attach = function(client)
-			client.server_capabilities.hoverProvider = false
-		end,
-	},
 	rust_analyzer = {
 		["rust-analyzer "] = {
 			settings = {
@@ -38,8 +23,10 @@ local servers = {
 			},
 		},
 	},
+	basedpyright = {},
 	clangd = {},
 	jdtls = {},
+	marksman = {},
 	taplo = {},
 }
 local formatters = { stylua = {}, ruff = {}, ["clang-format"] = {} }
@@ -51,80 +38,13 @@ end, mason_tools_to_install)
 
 return {
 	"neovim/nvim-lspconfig",
-	event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+	event = { "BufReadPost", "BufNewFile" },
 	cmd = { "LspInfo", "LspInstall", "LspUninstall", "Mason" },
 	dependencies = {
-		{
-			"saghen/blink.cmp",
-			dependencies = {
-				"rafamadriz/friendly-snippets",
-				{
-					"Kaiser-Yang/blink-cmp-git",
-					dependencies = { "nvim-lua/plenary.nvim" },
-				},
-			},
-			version = "1.*",
-			---@module 'blink.cmp'
-			---@type blink.cmp.Config
-			opts = {
-				keymap = { preset = "enter" },
-				completion = {
-					documentation = { window = { border = "rounded" } },
-					ghost_text = { enabled = true },
-					menu = { auto_show = true, border = "rounded" },
-				},
-				cmdline = {
-					completion = {
-						ghost_text = { enabled = true },
-						menu = { auto_show = true },
-						list = { selection = { preselect = false } },
-					},
-				},
-				sources = {
-					default = { "lazydev", "lsp", "path", "snippets", "git", "buffer" },
-					providers = {
-						lazydev = {
-							name = "LazyDev",
-							module = "lazydev.integrations.blink",
-							score_offset = 100,
-						},
-						git = {
-							module = "blink-cmp-git",
-							name = "Git",
-						},
-					},
-				},
-			},
-		},
+		"saghen/blink.cmp",
 		{ "williamboman/mason.nvim", opts = true },
 		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		{
-			"kosayoda/nvim-lightbulb",
-			opts = {
-				autocmd = { enabled = true },
-				ignore = {
-					clients = {},
-					ft = {},
-					actions_without_kind = false,
-				},
-			},
-		},
-		{
-			"kevinhwang91/nvim-ufo",
-			opts = {},
-			config = function(opts)
-				local ufo = require("ufo")
-
-				-- vim.o.foldcolumn = "1" -- '0' is not bad
-				vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-				vim.o.foldlevelstart = 99
-				vim.o.foldenable = true
-
-				ufo.setup(opts)
-			end,
-			dependencies = { "kevinhwang91/promise-async" },
-		},
 	},
 	config = function()
 		local blink_cmp = require("blink.cmp")
@@ -136,6 +56,11 @@ return {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = function(ev)
 				vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+				vim.diagnostic.config({
+					virtual_lines = {
+						current_line = true,
+					},
+				})
 			end,
 		})
 
@@ -165,6 +90,9 @@ return {
 		mason_lspconfig.setup({
 			handlers = {
 				function(server_name)
+					if server_name == "ruff" then
+						return
+					end
 					local server = servers[server_name] or {}
 					-- This handles overriding only values explicitly passed
 					-- by the server configuration above. Useful when disabling

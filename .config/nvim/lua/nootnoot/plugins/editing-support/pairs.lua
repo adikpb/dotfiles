@@ -1,1 +1,1 @@
-return { "echasnovski/mini.pairs", version = false, event = { "BufReadPre", "BufReadPost" }, opts = true }
+return { "echasnovski/mini.pairs", version = false, event = { "InsertEnter" }, opts = true }
