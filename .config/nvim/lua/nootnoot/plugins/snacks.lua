@@ -62,6 +62,9 @@ return {
 				files = { hidden = true },
 				grep = { hidden = true },
 				grep_word = { hidden = true },
+				-- notifications = {
+				-- 	confirm = ,
+				-- },
 			},
 		},
 		quickfile = { enabled = true },
@@ -69,12 +72,15 @@ return {
 			enabled = true,
 			filter = function(buf)
 				local excluded_filetypes = { "blink-cmp-menu" }
+				local b = vim.b[buf]
+				local bo = vim.bo[buf]
 				return vim.g.snacks_scroll ~= false
-					and vim.b[buf].snacks_scroll ~= false
-					and vim.bo[buf].buftype ~= "terminal"
-					and not vim.tbl_contains(excluded_filetypes, vim.bo[buf].filetype)
+					and b.snacks_scroll ~= false
+					and bo.buftype ~= "terminal"
+					and not vim.tbl_contains(excluded_filetypes, bo.filetype)
 			end,
 		},
+		statuscolumn = { enabled = true },
 	},
 	keys = {
 		{
@@ -123,18 +129,18 @@ return {
 		},
 		-- Grep
 		{
+			"<leader>/",
+			function()
+				require("snacks").picker.grep()
+			end,
+			desc = "Grep",
+		},
+		{
 			"<leader>sb",
 			function()
 				require("snacks").picker.grep_buffers()
 			end,
 			desc = "Grep Open Buffers",
-		},
-		{
-			"<leader>sg",
-			function()
-				require("snacks").picker.grep()
-			end,
-			desc = "Grep",
 		},
 		{
 			"<leader>sw",
@@ -226,4 +232,19 @@ return {
 			desc = "Dismiss All Notifications",
 		},
 	},
+	init = function()
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "VeryLazy",
+			callback = function()
+				-- Setup some globals for debugging (lazy-loaded)
+				_G.dd = function(...)
+					Snacks.debug.inspect(...)
+				end
+				_G.bt = function()
+					Snacks.debug.backtrace()
+				end
+				vim.print = _G.dd
+			end,
+		})
+	end,
 }
