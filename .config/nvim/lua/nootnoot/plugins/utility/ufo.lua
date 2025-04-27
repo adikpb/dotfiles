@@ -19,11 +19,11 @@ return {
 		map("n", "zr", ufo.openFoldsExceptKinds, { desc = "Fold less" })
 		map("n", "zm", ufo.closeFoldsWith, { desc = "Fold more" })
 		map("n", "K", function()
-			local winid = ufo.peekFoldedLinesUnderCursor()
+			local winid = ufo.peekFoldedLinesUnderCursor(true)
 			if not winid then
 				vim.lsp.buf.hover()
 			end
-		end, { desc = "Hover" })
+		end, { desc = "LSP Hover/Peek Fold", buffer = true })
 
 		ufo.setup(opts)
 	end,
