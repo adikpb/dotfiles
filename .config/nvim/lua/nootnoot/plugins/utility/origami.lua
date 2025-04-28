@@ -1,4 +1,4 @@
 return {
-	"chrisgrieser/nvim-origami",
-	opts = true,
+  "chrisgrieser/nvim-origami",
+  opts = true,
 }

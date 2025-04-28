@@ -18,7 +18,7 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous: Cursor in Middle During Se
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Copy to Clipboard" })
 
 -- Delete to void in either Visual or Normal mode
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete to Void" })
+-- vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete to Void" })
 
 -- Prevent `Q` presses in Normal mode
 vim.keymap.set("n", "Q", "<nop>")
@@ -31,12 +31,8 @@ vim.keymap.set("n", "Q", "<nop>")
 
 -- Replace current word you are on
 vim.keymap.set(
-	{ "n", "v" },
-	"<leader>rw",
-	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-	{ desc = "[R]eplace Current [W]ord You Are On" }
+  { "n", "v" },
+  "<leader>rw",
+  [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = "[R]eplace Current [W]ord You Are On" }
 )
-
--- Navigate Buffers
-vim.keymap.set("n", "]b", "<cmd>bn<CR>", { desc = "Next Buffer" })
-vim.keymap.set("n", "[b", "<cmd>bp<CR>", { desc = "Previous Buffer" })
