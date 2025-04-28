@@ -64,30 +64,37 @@ return {
 				grep_word = { hidden = true },
 				notifications = {
 					confirm = function(picker, item)
+						vim.print(item)
+						---@type integer
+						local preview_buf = picker.preview.win.buf
 						local buf = vim.api.nvim_create_buf(false, true)
 
-						local text = vim.split(item.item.msg, "\n")
 						local icon = item.item.icon
 						local level = item.item.level:upper()
 						local title = icon .. level .. " " .. item.item.title
+						local text = vim.api.nvim_buf_get_lines(preview_buf, 0, -1, true)
+						local ft = item.item.ft or item.preview.ft
 
 						local height_win = vim.o.lines
 						local width_win = vim.o.columns
 						local height = math.min(math.floor(height_win * 0.6), #text)
 						local width = math.floor(width_win * 0.6)
 
+						vim.bo[buf].ft = ft
 						vim.api.nvim_buf_set_lines(buf, 0, -1, true, text)
-						vim.api.nvim_open_win(buf, true, {
+						local win_opts = {
 							relative = "editor",
 							height = height,
 							width = width,
-							row = (height_win - height) / 2,
+							row = (height_win - height) / 2 - 2,
 							col = (width_win - width) / 2,
 							style = "minimal",
 							border = "rounded",
 							title = title,
 							title_pos = "center",
-						})
+						}
+
+						vim.api.nvim_open_win(buf, true, win_opts)
 						vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<cr>", {})
 
 						picker:close()
