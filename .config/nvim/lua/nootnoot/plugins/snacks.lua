@@ -56,12 +56,18 @@ return {
       enabled = true,
       timeout = 3000,
     },
+    ---@class snacks.picker.Config
     picker = {
       enabled = true,
       sources = {
         files = { hidden = true },
         grep = { hidden = true },
         grep_word = { hidden = true },
+        undo = {
+          layout = {
+            preset = "sidebar",
+          },
+        },
         notifications = {
           confirm = function(picker, item)
             ---@type integer
@@ -80,6 +86,7 @@ return {
             local width = math.floor(width_win * 0.6)
 
             vim.bo[buf].ft = ft
+            vim.bo[buf].modifiable = false
             vim.api.nvim_buf_set_lines(buf, 0, -1, true, text)
             local win_opts = {
               relative = "editor",
@@ -119,7 +126,7 @@ return {
     {
       "<leader>.",
       function()
-        require("snacks").picker()
+        require("snacks").picker.pickers()
       end,
       desc = "Show Available Pickers",
     },
@@ -143,7 +150,7 @@ return {
       function()
         require("snacks").picker.notifications()
       end,
-      desc = "Notification History",
+      desc = "[n]otifications",
     },
     -- find
     {
@@ -151,7 +158,7 @@ return {
       function()
         require("snacks").picker.files()
       end,
-      desc = "Find Files",
+      desc = "[s]earch [f]iles",
     },
     {
       "<leader>sr",
@@ -180,7 +187,7 @@ return {
       function()
         require("snacks").picker.grep_word()
       end,
-      desc = "Visual selection or word",
+      desc = "Grep Visual Selection or Word",
       mode = { "n", "x" },
     },
     -- search
@@ -189,14 +196,14 @@ return {
       function()
         require("snacks").picker.help()
       end,
-      desc = "Help Pages",
+      desc = "[s]earch [h]elp Pages",
     },
     {
       "<leader>sR",
       function()
         require("snacks").picker.resume()
       end,
-      desc = "Resume",
+      desc = "[s]earch [R]esume",
     },
     -- LSP
     {
@@ -204,14 +211,14 @@ return {
       function()
         require("snacks").picker.lsp_definitions()
       end,
-      desc = "Goto Definition",
+      desc = "Goto [d]efinition",
     },
     {
       "gD",
       function()
         require("snacks").picker.lsp_declarations()
       end,
-      desc = "Goto Declaration",
+      desc = "Goto [D]eclaration",
     },
     {
       "grr",
@@ -219,50 +226,50 @@ return {
         require("snacks").picker.lsp_references()
       end,
       nowait = true,
-      desc = "References",
+      desc = "[r]eferences",
     },
     {
-      "gI",
+      "gri",
       function()
         require("snacks").picker.lsp_implementations()
       end,
-      desc = "Goto Implementation",
+      desc = "Goto [i]mplementation",
     },
     {
-      "gy",
+      "grt",
       function()
         require("snacks").picker.lsp_type_definitions()
       end,
-      desc = "Goto T[y]pe Definition",
+      desc = "Goto [t]ype Definition",
     },
     {
       "<leader>ss",
       function()
-        require("snacks").picker.lsp_symbols()
-      end,
-      desc = "LSP Symbols",
-    },
-    {
-      "<leader>sS",
-      function()
         require("snacks").picker.lsp_workspace_symbols()
       end,
-      desc = "LSP Workspace Symbols",
+      desc = "LSP Work[s]pace [s]ymbols",
     },
     -- Other
-    {
-      "<leader>rf",
-      function()
-        require("snacks").rename.rename_file()
-      end,
-      desc = "Rename File",
-    },
     {
       "<leader>nh",
       function()
         require("snacks").notifier.hide()
       end,
       desc = "Dismiss All Notifications",
+    },
+    {
+      "<leader>rf",
+      function()
+        require("snacks").rename.rename_file()
+      end,
+      desc = "[r]ename [f]ile",
+    },
+    {
+      "<leader>u",
+      function()
+        require("snacks").picker.undo()
+      end,
+      desc = "[u]ndo tree",
     },
   },
   init = function()
