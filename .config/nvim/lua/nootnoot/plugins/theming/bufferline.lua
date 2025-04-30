@@ -6,8 +6,6 @@ return {
   ---@type bufferline.UserConfig
   opts = {
     options = {
-      mode = "buffers", -- set to "tabs" to only show tabpages instead
-      numbers = "buffer_id",
       -- minimal
       style_preset = 2,
       diagnostics = "nvim_lsp",

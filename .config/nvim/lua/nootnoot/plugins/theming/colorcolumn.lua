@@ -1,8 +1,9 @@
 return {
   "m4xshen/smartcolumn.nvim",
-  event = { "BufReadPre", "BufReadPost" },
+  lazy = false,
   opts = {
     disabled_filetypes = {
+      "NeogitStatus",
       "checkhealth",
       "help",
       "lazy",
