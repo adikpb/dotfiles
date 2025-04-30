@@ -14,9 +14,8 @@ return {
   opts = {
     keymap = { preset = "enter" },
     completion = {
-      documentation = { window = { border = "rounded" } },
       ghost_text = { enabled = true },
-      menu = { auto_show = true, border = "rounded" },
+      menu = { auto_show = true },
     },
     cmdline = {
       completion = {

@@ -64,7 +64,6 @@ return {
         grep_word = { hidden = true },
         notifications = {
           confirm = function(picker, item)
-            vim.print(item)
             ---@type integer
             local preview_buf = picker.preview.win.buf
             local buf = vim.api.nvim_create_buf(false, true)
@@ -89,7 +88,6 @@ return {
               row = (height_win - height) / 2 - 2,
               col = (width_win - width) / 2,
               style = "minimal",
-              border = "rounded",
               title = title,
               title_pos = "center",
             }
