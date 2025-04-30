@@ -7,6 +7,7 @@ return {
       "help",
       "lazy",
       "mason",
+      "netrw",
       "noice",
       "trouble",
     },

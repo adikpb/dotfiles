@@ -28,6 +28,10 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
+vim.opt.mousemoveevent = true
+
+vim.g.is_transparent = true
+
 -- python nvim virtaulenv
 vim.g.python3_host_prog = os.getenv("HOME") .. ".local/venvs/pynvim/bin/python"
 vim.g.loaded_node_provider = 0

@@ -8,6 +8,8 @@ return {
     options = {
       mode = "buffers", -- set to "tabs" to only show tabpages instead
       numbers = "buffer_id",
+      -- minimal
+      style_preset = 2,
       diagnostics = "nvim_lsp",
       -- offsets = {
       --     {
@@ -21,9 +23,4 @@ return {
       -- [focused and unfocused]. eg: { '|', '|' }
     },
   },
-  config = function(_, opts)
-    local bufferline = require("bufferline")
-    opts.options.style_preset = bufferline.style_preset.minimal
-    bufferline.setup(opts)
-  end,
 }
