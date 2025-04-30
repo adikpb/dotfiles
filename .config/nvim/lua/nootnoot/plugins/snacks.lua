@@ -86,8 +86,8 @@ return {
             local width = math.floor(width_win * 0.6)
 
             vim.bo[buf].ft = ft
-            vim.bo[buf].modifiable = false
             vim.api.nvim_buf_set_lines(buf, 0, -1, true, text)
+            vim.bo[buf].modifiable = false
             local win_opts = {
               relative = "editor",
               height = height,
@@ -101,6 +101,7 @@ return {
 
             vim.api.nvim_open_win(buf, true, win_opts)
             vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<cr>", {})
+            vim.api.nvim_buf_set_keymap(buf, "n", "<esc>", "<cmd>close<cr>", {})
 
             picker:close()
           end,
