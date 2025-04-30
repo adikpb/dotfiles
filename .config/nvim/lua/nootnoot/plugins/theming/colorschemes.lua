@@ -22,6 +22,7 @@ return {
       ---@param highlights tokyonight.Highlights
       ---@param colors ColorScheme
       on_highlights = function(highlights, colors)
+        highlights.WhichKeyNormal = { bg = colors.bg_float }
         if vim.g.is_transparent then
           highlights.TabLineFill = { bg = colors.none }
         end
