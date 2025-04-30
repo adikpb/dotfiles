@@ -1,5 +1,6 @@
 return {
   -- tokyonight
+  ---@module "tokyonight"
   {
     "folke/tokyonight.nvim",
     name = "tokyonight",
@@ -9,15 +10,14 @@ return {
       style = "night",
       transparent = vim.g.is_transparent,
       styles = {
-        floats = vim.g.is_transparent and "transparent" or "normal",
+        sidebars = vim.g.is_transparent and "normal" or "dark",
+        floats = vim.g.is_transparent and "normal" or "dark",
       },
       dim_inactive = true,
       lualine_bold = true,
       ---@param colors ColorScheme
       on_colors = function(colors)
-        if vim.g.is_transparent then
-          colors.bg_statusline = colors.none
-        end
+        colors.bg_statusline = colors.none
       end,
       ---@param highlights tokyonight.Highlights
       ---@param colors ColorScheme
