@@ -13,11 +13,14 @@ return {
       },
       dim_inactive = true,
       lualine_bold = true,
+      ---@param colors ColorScheme
       on_colors = function(colors)
         if vim.g.is_transparent then
           colors.bg_statusline = colors.none
         end
       end,
+      ---@param highlights tokyonight.Highlights
+      ---@param colors ColorScheme
       on_highlights = function(highlights, colors)
         if vim.g.is_transparent then
           highlights.TabLineFill = { bg = colors.none }
