@@ -1,6 +1,5 @@
 vim.g.mapleader = " "
 vim.g.maplocaleader = " "
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Project View" })
 
 -- Move lines in Visual mode along with proper indentation
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move Lines Up" })

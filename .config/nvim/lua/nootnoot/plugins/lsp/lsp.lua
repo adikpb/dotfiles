@@ -5,7 +5,6 @@ local servers = {
         completion = {
           callSnippet = "Replace",
         },
-        -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
         diagnostics = {
           disable = {
             "missing-fields",
@@ -31,10 +30,11 @@ local servers = {
 }
 local formatters = { stylua = {}, ruff = {}, ["clang-format"] = {} }
 local manually_installed_servers = {}
-local mason_tools_to_install = vim.tbl_keys(vim.tbl_deep_extend("force", {}, servers, formatters))
+local tools
+tools = vim.tbl_keys(vim.tbl_deep_extend("force", {}, servers, formatters))
 local ensure_installed = vim.tbl_filter(function(name)
   return not vim.tbl_contains(manually_installed_servers, name)
-end, mason_tools_to_install)
+end, tools)
 
 return {
   "neovim/nvim-lspconfig",
@@ -64,9 +64,9 @@ return {
       end,
     })
 
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend("force", capabilities, blink_cmp.get_lsp_capabilities())
-    capabilities = vim.tbl_deep_extend("force", capabilities, {
+    local cap = vim.lsp.protocol.make_client_capabilities()
+    cap = vim.tbl_deep_extend("force", cap, blink_cmp.get_lsp_capabilities())
+    cap = vim.tbl_deep_extend("force", cap, {
       textDocument = {
         foldingRange = {
           dynamicRegistration = false,
@@ -85,7 +85,7 @@ return {
     vim.api.nvim_command("MasonToolsClean")
     vim.api.nvim_command("MasonToolsUpdate")
 
-    mason.setup()
+    -- mason.setup()
 
     mason_lspconfig.setup({
       handlers = {
@@ -97,7 +97,7 @@ return {
           -- This handles overriding only values explicitly passed
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for tsserver)
-          server_config.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server_config.capabilities or {})
+          server_config.capabilities = vim.tbl_deep_extend("force", {}, cap, server_config.capabilities or {})
           vim.lsp.config(server_name, server_config)
           vim.lsp.enable(server_name)
         end,
