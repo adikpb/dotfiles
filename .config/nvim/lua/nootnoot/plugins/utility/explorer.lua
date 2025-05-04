@@ -60,11 +60,10 @@ return {
       local preview_width = opts.preview_win.width
       local win_opts = opts.preview_win.split_options
 
-      vim.api.nvim_create_augroup("OilBridge", { clear = false })
       vim.api.nvim_create_autocmd({ "BufEnter" }, {
-        group = "OilBridge",
         pattern = "oil://*",
         callback = function(args)
+          vim.api.nvim_create_augroup("OilBridge", { clear = true })
           vim.api.nvim_create_autocmd({ "CursorMoved" }, {
             group = "OilBridge",
             buffer = args.buf,
