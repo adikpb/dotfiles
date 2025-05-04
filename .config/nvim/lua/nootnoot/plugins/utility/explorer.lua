@@ -1,30 +1,3 @@
----@param args vim.api.keyset.create_autocmd.callback_args
-local function oil_bridge(args)
-  if vim.bo[args.buf].ft ~= "oil" then
-    return
-  end
-
-  local oil = require("oil")
-
-  local entry = oil.get_cursor_entry()
-  if not entry then
-    return
-  end
-
-  local s, api = pcall(require, "nvim-tree.api")
-
-  if not s then
-    return
-  end
-
-  local filename = entry.name
-  local directory = oil.get_current_dir()
-  local path = directory .. filename
-
-  api.tree.collapse_all(false)
-  api.tree.find_file({ buf = path, focus = false })
-end
-
 return {
   {
     "stevearc/oil.nvim",
@@ -67,13 +40,29 @@ return {
           vim.api.nvim_create_autocmd({ "CursorMoved" }, {
             group = "OilBridge",
             buffer = args.buf,
-            callback = function(args)
-              oil_bridge(args)
+            callback = function()
+              local entry = oil.get_cursor_entry()
+              if not entry then
+                return
+              end
+
+              local s, api = pcall(require, "nvim-tree.api")
+
+              if not s then
+                vim.notify("`nvim-tree` not initialzed!")
+                return
+              end
+
+              local filename = entry.name
+              local directory = oil.get_current_dir()
+              local path = directory .. filename
+
+              api.tree.collapse_all(false)
+              api.tree.find_file({ buf = path, focus = false })
             end,
           })
         end,
       })
-
       -- snacks.nvim rename
       vim.api.nvim_create_autocmd("User", {
         pattern = "OilActionsPost",
@@ -150,7 +139,6 @@ return {
         function()
           local api = require("nvim-tree.api")
           api.tree.toggle({ find_file = true, focus = false })
-          oil_bridge({ buf = 0 })
         end,
         desc = "[p]roject [t]ree",
       },
