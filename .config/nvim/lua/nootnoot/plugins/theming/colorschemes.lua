@@ -5,13 +5,13 @@ return {
     "folke/tokyonight.nvim",
     name = "tokyonight",
     lazy = false,
-    priority = 1000,
+    priority = 1001,
     opts = {
       style = "night",
       transparent = vim.g.is_transparent,
       styles = {
-        sidebars = vim.g.is_transparent and "normal" or "dark",
-        floats = vim.g.is_transparent and "normal" or "dark",
+        sidebars = vim.g.is_transparent and "transparent" or "normal",
+        floats = vim.g.is_transparent and "transparent" or "normal",
       },
       dim_inactive = true,
       lualine_bold = true,
