@@ -127,7 +127,7 @@ return {
     {
       "<leader>.",
       function()
-        require("snacks").picker.pickers()
+        Snacks.picker.pickers()
       end,
       desc = "Show Available Pickers",
     },
@@ -135,21 +135,21 @@ return {
     {
       "<leader><space>",
       function()
-        require("snacks").picker.smart()
+        Snacks.picker.smart()
       end,
       desc = "Smart Find Files",
     },
     {
       "<leader>,",
       function()
-        require("snacks").picker.buffers()
+        Snacks.picker.buffers()
       end,
       desc = "Buffers",
     },
     {
       "<leader>n",
       function()
-        require("snacks").picker.notifications()
+        Snacks.picker.notifications()
       end,
       desc = "[n]otifications",
     },
@@ -157,14 +157,14 @@ return {
     {
       "<leader>sf",
       function()
-        require("snacks").picker.files()
+        Snacks.picker.files()
       end,
       desc = "[s]earch [f]iles",
     },
     {
       "<leader>sr",
       function()
-        require("snacks").picker.recent()
+        Snacks.picker.recent()
       end,
       desc = "Recent",
     },
@@ -172,21 +172,21 @@ return {
     {
       "<leader>/",
       function()
-        require("snacks").picker.grep()
+        Snacks.picker.grep()
       end,
       desc = "Grep",
     },
     {
       "<leader>sb",
       function()
-        require("snacks").picker.grep_buffers()
+        Snacks.picker.grep_buffers()
       end,
       desc = "Grep Open Buffers",
     },
     {
       "<leader>sw",
       function()
-        require("snacks").picker.grep_word()
+        Snacks.picker.grep_word()
       end,
       desc = "Grep Visual Selection or Word",
       mode = { "n", "x" },
@@ -195,14 +195,14 @@ return {
     {
       "<leader>sh",
       function()
-        require("snacks").picker.help()
+        Snacks.picker.help()
       end,
       desc = "[s]earch [h]elp Pages",
     },
     {
       "<leader>sR",
       function()
-        require("snacks").picker.resume()
+        Snacks.picker.resume()
       end,
       desc = "[s]earch [R]esume",
     },
@@ -210,21 +210,21 @@ return {
     {
       "gd",
       function()
-        require("snacks").picker.lsp_definitions()
+        Snacks.picker.lsp_definitions()
       end,
       desc = "Goto [d]efinition",
     },
     {
       "gD",
       function()
-        require("snacks").picker.lsp_declarations()
+        Snacks.picker.lsp_declarations()
       end,
       desc = "Goto [D]eclaration",
     },
     {
       "grr",
       function()
-        require("snacks").picker.lsp_references()
+        Snacks.picker.lsp_references()
       end,
       nowait = true,
       desc = "[r]eferences",
@@ -232,21 +232,21 @@ return {
     {
       "gri",
       function()
-        require("snacks").picker.lsp_implementations()
+        Snacks.picker.lsp_implementations()
       end,
       desc = "Goto [i]mplementation",
     },
     {
       "grt",
       function()
-        require("snacks").picker.lsp_type_definitions()
+        Snacks.picker.lsp_type_definitions()
       end,
       desc = "Goto [t]ype Definition",
     },
     {
       "<leader>ss",
       function()
-        require("snacks").picker.lsp_workspace_symbols()
+        Snacks.picker.lsp_workspace_symbols()
       end,
       desc = "LSP Work[s]pace [s]ymbols",
     },
@@ -254,21 +254,21 @@ return {
     {
       "<leader>nh",
       function()
-        require("snacks").notifier.hide()
+        Snacks.notifier.hide()
       end,
       desc = "Dismiss All Notifications",
     },
     {
       "<leader>rf",
       function()
-        require("snacks").rename.rename_file()
+        Snacks.rename.rename_file()
       end,
       desc = "[r]ename [f]ile",
     },
     {
       "<leader>u",
       function()
-        require("snacks").picker.undo()
+        Snacks.picker.undo()
       end,
       desc = "[u]ndo tree",
     },
