@@ -4,7 +4,6 @@ return {
     "rafamadriz/friendly-snippets",
     {
       "Kaiser-Yang/blink-cmp-git",
-      dependencies = { "nvim-lua/plenary.nvim" },
     },
   },
   version = "1.*",

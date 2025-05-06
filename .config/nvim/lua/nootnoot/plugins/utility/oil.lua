@@ -1,6 +1,5 @@
 return {
   "stevearc/oil.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
   lazy = false,
   keys = { { "<leader>pv", "<cmd>Oil<CR>", desc = "[p]roject [v]iew" } },
   ---@module "oil"
