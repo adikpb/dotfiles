@@ -15,24 +15,19 @@ return {
   opts = {
     formatters_by_ft = {
       lua = { "stylua" },
-      python = { "ruff" },
+      python = { "ruff_format" },
       c = { "clang-format" },
-      toml = { "taplo" },
+      _ = { "prettier" },
     },
-    formatters = { ["clang-format"] = { prepend_args = { "-style", "{IndentWidth: 4}" } } },
+    default_format_opts = {
+      lsp_format = "fallback",
+    },
+    formatters = {
+      ["clang-format"] = { prepend_args = { "-style", "{IndentWidth: 4}" } },
+    },
     -- Set up format-on-save
-    format_after_save = function()
-      return {
-        async = true,
-        timeout_ms = 500,
-        lsp_format = "fallback",
-      }
-    end,
-    --- Customize formatters
-    -- formatters = {
-    -- shfmt = {
-    -- prepend_args = { "-i", "2" },
-    -- },
-    -- },
+    format_after_save = {
+      async = true,
+    },
   },
 }

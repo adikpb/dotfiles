@@ -1,9 +1,6 @@
 return {
   "ThePrimeagen/refactoring.nvim",
-  dependencies = {
-    "nvim-treesitter/nvim-treesitter",
-  },
-  opts = true,
+  opts = {},
   keys = {
     {
       "<leader>rr",

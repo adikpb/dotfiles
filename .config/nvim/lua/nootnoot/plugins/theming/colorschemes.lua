@@ -1,5 +1,4 @@
 return {
-  -- tokyonight
   ---@module "tokyonight"
   {
     "folke/tokyonight.nvim",
@@ -17,14 +16,15 @@ return {
       lualine_bold = true,
       ---@param colors ColorScheme
       on_colors = function(colors)
-        colors.bg_statusline = colors.none
+        if vim.g.is_transparent then
+          colors.bg_statusline = colors.none
+        end
       end,
       ---@param highlights tokyonight.Highlights
       ---@param colors ColorScheme
       on_highlights = function(highlights, colors)
-        highlights.WhichKeyNormal = { bg = colors.bg_float }
         if vim.g.is_transparent then
-          highlights.TabLineFill = { bg = colors.none }
+          highlights.TabLineFill.bg = colors.none
         end
       end,
     },
