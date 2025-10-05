@@ -31,47 +31,47 @@ return {
     local preview_width = opts.preview_win.width
     local win_opts = opts.preview_win.split_options
 
-    vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    vim.api.nvim_create_augroup("OilBridge", { clear = true })
+    vim.api.nvim_create_autocmd({ "CursorMoved" }, {
+      group = "OilBridge",
       pattern = "oil://*",
-      callback = function(args)
-        vim.api.nvim_create_augroup("OilBridge", { clear = true })
-        vim.api.nvim_create_autocmd({ "CursorMoved" }, {
-          group = "OilBridge",
-          buffer = args.buf,
-          callback = function()
-            local entry = oil.get_cursor_entry()
-            if not entry then
-              return
-            end
-
-            local s, api = pcall(require, "nvim-tree.api")
-
-            if not s then
-              vim.notify("`nvim-tree` not initialzed!")
-              return
-            end
-
-            local filename = entry.name
-            local directory = oil.get_current_dir()
-            local path = directory .. filename
-
-            api.tree.collapse_all(false)
-            api.tree.find_file({ buf = path, focus = false })
-          end,
-        })
-      end,
-    })
-    -- snacks.nvim rename
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "OilActionsPost",
-      callback = function(event)
-        local src = event.data.actions.src_url
-        local dst = event.data.actions.dest_url
-        if event.data.actions.type == "move" then
-          require("snacks").rename.on_rename_file(src, dst)
+      callback = function()
+        if not package.loaded["nvim-tree"] then
+          return
         end
+
+        local entry = oil.get_cursor_entry()
+        if not entry then
+          return
+        end
+
+        local s, api = pcall(require, "nvim-tree.api")
+
+        if not s then
+          vim.notify("`nvim-tree` not found!")
+          return
+        end
+
+        local filename = entry.name
+        local directory = oil.get_current_dir()
+        local path = directory .. filename
+
+        api.tree.collapse_all(false)
+        api.tree.find_file({ buf = path, focus = false })
       end,
     })
+
+    -- -- snacks.nvim rename
+    -- vim.api.nvim_create_autocmd("User", {
+    --   pattern = "OilActionsPost",
+    --   callback = function(event)
+    --     local src = event.data.actions.src_url
+    --     local dst = event.data.actions.dest_url
+    --     if event.data.actions.type == "move" then
+    --       require("snacks").rename.on_rename_file(src, dst)
+    --     end
+    --   end,
+    -- })
 
     -- github.com/stevearc/oil.nvim/blob/master/lua/oil/actions.lua#L70
     local function togglePreview()
