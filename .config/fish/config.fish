@@ -1,19 +1,22 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+fish_add_path -g "/usr/local/bin"
+
 ## change this - java home
 set -gx JAVA_HOME (/usr/libexec/java_home)
 
-# cargo
-fish_add_path ~/.cargo/bin
+# rustup
+fish_add_path -g "$(brew --prefix rustup)/bin"
+
 
 # uv
-fish_add_path "/Users/bijoykozhampurath/.local/bin"
+fish_add_path -g "/Users/bijoykozhampurath/.local/bin"
 
 if status is-interactive
-    # starship
     starship init fish | source
-
-    test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+    fzf --fish | source
+    zoxide init fish | source
+    sesh completion fish | source
 
     # https://docs.astral.sh/uv/getting-started/installation/#shell-autocompletion
     uv generate-shell-completion fish | source
