@@ -2,9 +2,11 @@ return {
   "folke/snacks.nvim",
   priority = 1000,
   lazy = false,
+  ---@module "snacks"
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
+    image = { enabled = true },
     indent = {
       enabled = true,
       indent = {
@@ -45,7 +47,7 @@ return {
           hl.fg = hl_fg
           vim.api.nvim_set_hl(0, scope_hls[i], hl)
 
-          hl_fg = tokyonight_util.darken(hl_fg, 0.05)
+          hl_fg = tokyonight_util.darken(hl_fg, 0.4)
           hl.fg = hl_fg
           vim.api.nvim_set_hl(0, indent_hls[i], hl)
         end
@@ -99,9 +101,28 @@ return {
               title_pos = "center",
             }
 
-            vim.api.nvim_open_win(buf, true, win_opts)
-            vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<cr>", {})
-            vim.api.nvim_buf_set_keymap(buf, "n", "<esc>", "<cmd>close<cr>", {})
+            local _ = vim.api.nvim_open_win(buf, true, win_opts)
+
+            local function cleanup_win(buf_id)
+              vim.api.nvim_buf_delete(buf_id, {})
+            end
+
+            vim.api.nvim_buf_set_keymap(buf, "n", "q", "", {
+              callback = function()
+                cleanup_win(buf)
+              end,
+            })
+            vim.api.nvim_buf_set_keymap(buf, "n", "<esc>", "", {
+              callback = function()
+                cleanup_win(buf)
+              end,
+            })
+            vim.api.nvim_create_autocmd("WinLeave", {
+              buffer = buf,
+              callback = function()
+                cleanup_win(buf)
+              end,
+            })
 
             picker:close()
           end,
@@ -122,6 +143,7 @@ return {
       end,
     },
     statuscolumn = { enabled = true },
+    toggle = { enabled = true },
   },
   keys = {
     {
@@ -147,11 +169,11 @@ return {
       desc = "Buffers",
     },
     {
-      "<leader>n",
+      "<leader>ns",
       function()
         Snacks.picker.notifications()
       end,
-      desc = "[n]otifications",
+      desc = "[n]otifications [s]how",
     },
     -- find
     {
@@ -256,7 +278,7 @@ return {
       function()
         Snacks.notifier.hide()
       end,
-      desc = "Dismiss All Notifications",
+      desc = "[n]otifications [h]ide",
     },
     {
       "<leader>rf",
@@ -285,6 +307,16 @@ return {
           Snacks.debug.backtrace()
         end
         vim.print = _G.dd
+        Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ts")
+        Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+        Snacks.toggle.diagnostics():map("<leader>td")
+        Snacks.toggle.line_number():map("<leader>tl")
+        Snacks.toggle
+          .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+          :map("<leader>tc")
+        Snacks.toggle.treesitter():map("<leader>tT")
+        Snacks.toggle.inlay_hints():map("<leader>th")
+        Snacks.toggle.dim():map("<leader>tD")
       end,
     })
   end,
