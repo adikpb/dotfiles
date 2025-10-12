@@ -9,7 +9,7 @@ return {
   ---@module "blink.cmp"
   ---@type blink.cmp.Config
   opts = {
-    keymap = { preset = "enter" },
+    keymap = { preset = "super-tab" },
     completion = {
       menu = {
         auto_show = false,
@@ -17,7 +17,7 @@ return {
           columns = {
             { "kind_icon" },
             { "label", "label_description", gap = 1 },
-            { "source_id" },
+            { "source_name" },
           },
           components = {
             kind_icon = {
@@ -38,9 +38,6 @@ return {
                 return icon .. ctx.icon_gap
               end,
 
-              -- Optionally, use the highlight groups from nvim-web-devicons
-              -- You can also add the same function for `kind.highlight` if you
-              -- want to keep the highlight groups in sync with the icons.
               highlight = function(ctx)
                 local hl = ctx.kind_hl
                 if vim.tbl_contains({ "Path" }, ctx.source_name) then
@@ -53,13 +50,20 @@ return {
                 return hl
               end,
             },
-            source_id = {
+            source_name = {
               highlight = "BlinkCmpGhostText",
             },
           },
         },
       },
       ghost_text = { enabled = true, show_with_menu = false },
+      list = {
+        selection = {
+          preselect = function(_)
+            return not require("blink.cmp").snippet_active({ direction = 1 })
+          end,
+        },
+      },
     },
     cmdline = {
       completion = {
