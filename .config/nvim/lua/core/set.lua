@@ -22,7 +22,6 @@ vim.opt.mousemoveevent = true
 vim.g.is_transparent = true
 vim.o.winborder = "rounded"
 
--- python nvim virtaulenv
 vim.g.loaded_node_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0

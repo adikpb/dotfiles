@@ -9,7 +9,6 @@ return {
   ---@type wk.Opts
   opts = {
     preset = "helix",
-    -- TODO: Workaround till https://github.com/folke/which-key.nvim/issues/967
     show_help = false,
   },
 }

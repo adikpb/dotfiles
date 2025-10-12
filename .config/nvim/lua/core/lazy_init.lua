@@ -13,18 +13,20 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  { import = "nootnoot.plugins" },
-  { import = "nootnoot.plugins.debugging" },
-  { import = "nootnoot.plugins.editing-support" },
-  { import = "nootnoot.plugins.git" },
-  { import = "nootnoot.plugins.lsp" },
-  { import = "nootnoot.plugins.theming" },
-  { import = "nootnoot.plugins.utility" },
+  { import = "plugins" },
+  { import = "plugins.debugging" },
+  { import = "plugins.editing-support" },
+  { import = "plugins.git" },
+  { import = "plugins.lsp" },
+  { import = "plugins.theming" },
+  { import = "plugins.utility" },
 }, {
   change_detection = { notify = false },
   defaults = { lazy = true },
+  rocks = { enabled = false },
   dev = {
     path = "~/neovim-plugins",
     fallback = true,
   },
+  install = { colorscheme = { "tokyonight" } },
 })

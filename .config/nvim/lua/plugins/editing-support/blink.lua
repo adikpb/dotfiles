@@ -77,10 +77,21 @@ return {
           score_offset = 100,
         },
         git = {
-          module = "blink-cmp-git",
           name = "Git",
+          module = "blink-cmp-git",
         },
       },
     },
   },
+  config = function(_, opts)
+    local blink_cmp = require("blink.cmp")
+
+    local temp_conf = {}
+    local client_cap = vim.lsp.protocol.make_client_capabilities()
+    temp_conf.capabilities = blink_cmp.get_lsp_capabilities(client_cap)
+    vim.lsp.config("*", temp_conf)
+    vim.lsp.enable(vim.tbl_keys(LSP_SERVERS))
+
+    blink_cmp.setup(opts)
+  end,
 }
