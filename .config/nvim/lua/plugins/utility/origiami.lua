@@ -3,6 +3,7 @@ return {
   event = "VeryLazy",
   opts = {},
   init = function()
-    vim.opt.foldlevel = 50
+    vim.opt.foldlevel = 80
+    vim.opt.foldlevelstart = 80
   end,
 }
