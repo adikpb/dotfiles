@@ -130,18 +130,6 @@ return {
       },
     },
     quickfile = { enabled = true },
-    scroll = {
-      enabled = true,
-      filter = function(buf)
-        local excluded_filetypes = { "blink-cmp-menu" }
-        local b = vim.b[buf]
-        local bo = vim.bo[buf]
-        return vim.g.snacks_scroll ~= false
-          and b.snacks_scroll ~= false
-          and bo.buftype ~= "terminal"
-          and not vim.tbl_contains(excluded_filetypes, bo.filetype)
-      end,
-    },
     statuscolumn = { enabled = true },
     toggle = { enabled = true },
   },
