@@ -7,9 +7,9 @@ return {
       enabled = true,
       duration = 300,
       animtion_type = "zoom",
+      fps = 30,
       window_scoped = true,
     },
-    priority = 2048 * 3,
   },
   keys = {
     {
@@ -140,18 +140,6 @@ return {
       desc = "Highlight when yanking (copying) text",
       callback = function()
         require("undo-glow").yank()
-      end,
-    })
-
-    -- This only handles neovim instance and do not highlight when switching panes in tmux
-    vim.api.nvim_create_autocmd("CursorMoved", {
-      desc = "Highlight when cursor moved significantly",
-      callback = function()
-        require("undo-glow").cursor_moved({
-          animation = {
-            animation_type = "slide",
-          },
-        })
       end,
     })
 
