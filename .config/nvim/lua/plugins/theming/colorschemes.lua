@@ -20,6 +20,13 @@ return {
           colors.bg_statusline = colors.none
         end
       end,
+      ---@param highlights tokyonight.Highlights
+      ---@param colors ColorScheme
+      on_highlights = function(highlights, colors)
+        if vim.g.is_transparent then
+          highlights.TabLineFill.bg = colors.none
+        end
+      end,
     },
   },
 }
