@@ -1,5 +1,5 @@
 require("core.set")
-require("core.remap")
+require("core.keymaps")
 require("core.tools")
 require("core.autocommands")
 -- load last

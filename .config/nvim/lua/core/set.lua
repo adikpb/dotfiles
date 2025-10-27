@@ -19,7 +19,6 @@ vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
 vim.opt.mousemoveevent = true
-vim.g.is_transparent = true
 vim.o.winborder = "rounded"
 
 vim.g.loaded_node_provider = 0
