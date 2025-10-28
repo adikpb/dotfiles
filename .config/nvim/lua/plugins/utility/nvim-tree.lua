@@ -11,14 +11,12 @@ return {
     },
   },
   opts = {
-    hijack_netrw = false,
     sync_root_with_cwd = true,
     select_prompts = true,
     view = {
       centralize_selection = true,
       side = "right",
       width = 30,
-      -- float = { enable = true },
     },
     renderer = {
       group_empty = true,

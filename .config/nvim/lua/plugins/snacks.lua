@@ -65,11 +65,6 @@ return {
         files = { hidden = true },
         grep = { hidden = true },
         grep_word = { hidden = true },
-        undo = {
-          layout = {
-            preset = "sidebar",
-          },
-        },
         notifications = {
           confirm = function(picker, item)
             ---@type integer
@@ -274,13 +269,6 @@ return {
         Snacks.rename.rename_file()
       end,
       desc = "[r]ename [f]ile",
-    },
-    {
-      "<leader>u",
-      function()
-        Snacks.picker.undo()
-      end,
-      desc = "[u]ndo tree",
     },
   },
   init = function()
