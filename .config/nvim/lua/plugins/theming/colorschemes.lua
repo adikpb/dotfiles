@@ -12,7 +12,7 @@ return {
         sidebars = vim.g.is_transparent and "transparent" or "normal",
         floats = vim.g.is_transparent and "transparent" or "normal",
       },
-      dim_inactive = true,
+      dim_inactive = not vim.g.is_transparent,
       lualine_bold = true,
       ---@param colors ColorScheme
       on_colors = function(colors)

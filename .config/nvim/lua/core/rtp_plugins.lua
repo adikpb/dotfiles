@@ -1,5 +1,6 @@
 -- load after rtp's has been setup
 vim.api.nvim_create_autocmd("VimEnter", {
+  once = true,
   callback = function(_)
     -- nvim.undotree
     vim.cmd("packadd nvim.undotree")
