@@ -1,7 +1,7 @@
 return {
   "stevearc/oil.nvim",
   lazy = false,
-  keys = { { "<leader>pv", "<cmd>Oil<CR>", desc = "[p]roject [v]iew" } },
+  keys = { { "-", "<cmd>Oil<CR>", desc = "File Explorer" } },
   ---@module "oil"
   ---@type oil.SetupOpts
   opts = {
@@ -28,8 +28,6 @@ return {
     local util = require("oil.util")
     local layout = require("oil.layout")
     local actions = require("oil.actions")
-    local preview_width = opts.preview_win.width
-    local win_opts = opts.preview_win.split_options
 
     vim.api.nvim_create_augroup("OilBridge", { clear = true })
     vim.api.nvim_create_autocmd({ "CursorMoved" }, {
@@ -72,8 +70,11 @@ return {
     --     end
     --   end,
     -- })
+    --
 
-    -- github.com/stevearc/oil.nvim/blob/master/lua/oil/actions.lua#L70
+    local preview_width = opts.preview_win.width
+    local preview_win_opts = opts.preview_win.split_options
+    -- https://github.com/stevearc/oil.nvim/blob/master/lua/oil/actions.lua#L70
     local function togglePreview()
       local entry = oil.get_cursor_entry()
       if not entry then
@@ -92,7 +93,7 @@ return {
           return
         end
       end
-      oil.open_preview(win_opts, function(err)
+      oil.open_preview(preview_win_opts, function(err)
         winid = util.get_preview_win()
         if not err and winid then
           vim.api.nvim_win_set_width(winid, preview_width)
