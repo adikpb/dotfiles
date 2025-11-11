@@ -34,7 +34,11 @@ return {
         },
       },
       config = function(opts, _)
-        local tokyonight_util = require("tokyonight.util")
+        local s, tokyonight_util = pcall(require, "tokyonight.util")
+        if not s then
+          return
+        end
+
         local indent_hls = opts.indent.hl
         local scope_hls = opts.scope.hl
 

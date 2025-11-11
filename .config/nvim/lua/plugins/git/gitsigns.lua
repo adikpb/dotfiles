@@ -67,11 +67,6 @@ return {
       vim.keymap.set("n", "<leader>hq", gitsigns.setqflist, opts)
 
       -- Toggles
-      -- opts.desc = "Toggle: [g]it line [b]lame"
-      -- vim.keymap.set("n", "<leader>tgb", gitsigns.toggle_current_line_blame, opts)
-      -- opts.desc = "Toggle: [g]it [w]ord diff"
-      -- vim.keymap.set("n", "<leader>tgw", gitsigns.toggle_word_diff, opts)
-
       if package.loaded["snacks"] then
         Snacks.toggle
           .new({
@@ -95,6 +90,11 @@ return {
             end,
           })
           :map("<leader>tgw")
+      else
+        opts.desc = "Toggle: [g]it line [b]lame"
+        vim.keymap.set("n", "<leader>tgb", gitsigns.toggle_current_line_blame, opts)
+        opts.desc = "Toggle: [g]it [w]ord diff"
+        vim.keymap.set("n", "<leader>tgw", gitsigns.toggle_word_diff, opts)
       end
 
       -- Text object
