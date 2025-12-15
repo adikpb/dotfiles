@@ -1,6 +1,6 @@
 return {
   "folke/noice.nvim",
-  event = { "VeryLazy" },
+  event = "UIEnter",
   dependencies = {
     { "MunifTanjim/nui.nvim" },
   },
@@ -11,6 +11,25 @@ return {
       long_message_to_split = false,
       inc_rename = false, -- inc-rename.nvim
       lsp_doc_border = true,
+    },
+    routes = {
+      -- skip search_count
+      {
+        filter = {
+          event = "msg_show",
+          kind = "search_count",
+        },
+        opts = { skip = true },
+      },
+      -- hide written messages
+      {
+        filter = {
+          event = "msg_show",
+          kind = "",
+          find = "written",
+        },
+        opts = { skip = true },
+      },
     },
     lsp = {
       override = {

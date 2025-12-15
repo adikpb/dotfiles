@@ -1,7 +1,7 @@
 return {
   "akinsho/bufferline.nvim",
   version = "*",
-  event = { "VeryLazy" },
+  event = "VeryLazy",
   ---@module "bufferline"
   ---@type bufferline.UserConfig
   opts = {
