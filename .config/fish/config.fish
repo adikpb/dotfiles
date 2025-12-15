@@ -8,7 +8,6 @@ set -gx JAVA_HOME (/usr/libexec/java_home)
 # rustup
 fish_add_path -g "$(brew --prefix rustup)/bin"
 
-
 # uv
 fish_add_path -g "/Users/bijoykozhampurath/.local/bin"
 

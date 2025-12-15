@@ -1,6 +1,6 @@
 return {
   "m4xshen/smartcolumn.nvim",
-  lazy = false,
+  event = "UIEnter",
   opts = {
     disabled_filetypes = {
       "NeogitStatus",

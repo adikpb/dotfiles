@@ -1,10 +1,11 @@
 LSP_SERVERS = {
-  lua_ls = {},
-  rust_analyzer = {},
   basedpyright = {},
+  ruff = {},
   clangd = {},
   jdtls = {},
+  lua_ls = {},
   marksman = {},
+  rust_analyzer = {},
   taplo = {},
 }
 

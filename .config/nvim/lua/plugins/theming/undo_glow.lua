@@ -1,6 +1,6 @@
 return {
   "y3owk1n/undo-glow.nvim",
-  event = { "VeryLazy" },
+  event = "VeryLazy",
   ---@type UndoGlow.Config
   opts = {
     animation = {

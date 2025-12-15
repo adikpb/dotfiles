@@ -2,8 +2,3 @@
 name = "Dotfiles"
 path = "~/dotfiles/"
 startup_command = "nvim ."
-
-[[session]]
-name = "PAT"
-path = "~/Desktop/VIT/PAT_Training/"
-startup_command = "nvim ."

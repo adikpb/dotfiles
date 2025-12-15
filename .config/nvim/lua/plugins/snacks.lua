@@ -46,6 +46,10 @@ return {
           ---@type vim.api.keyset.highlight
           ---@diagnostic disable-next-line: assign-type-mismatch
           local hl = vim.api.nvim_get_hl(0, { name = indent_hls[i] })
+          if not hl.fg then
+            return
+          end
+
           local hl_fg = string.format("#%x", hl.fg)
 
           hl.fg = hl_fg

@@ -1,6 +1,6 @@
 return {
   "kosayoda/nvim-lightbulb",
-  event = { "LspAttach" },
+  event = "LspAttach",
   opts = {
     autocmd = { enabled = true },
     ignore = {

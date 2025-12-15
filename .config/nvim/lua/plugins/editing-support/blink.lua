@@ -5,7 +5,7 @@ return {
     "Kaiser-Yang/blink-cmp-git",
   },
   version = "1.*",
-  event = { "VeryLazy" },
+  event = "VeryLazy",
   ---@module "blink.cmp"
   ---@type blink.cmp.Config
   opts = {

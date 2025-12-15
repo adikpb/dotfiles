@@ -1,6 +1,6 @@
 return {
   "christoomey/vim-tmux-navigator",
-  event = { "VeryLazy" },
+  event = "VeryLazy",
   cmd = {
     "TmuxNavigateLeft",
     "TmuxNavigateDown",
@@ -16,7 +16,7 @@ return {
     { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>", desc = "Navigate to Pane on Right" },
     { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>", desc = "Navigate to Pane Previous Split" },
   },
-  config = function()
+  init = function()
     vim.g.tmux_navigator_save_on_switch = 2
   end,
 }

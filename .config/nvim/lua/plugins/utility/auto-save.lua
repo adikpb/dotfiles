@@ -2,7 +2,7 @@ return {
   "okuuva/auto-save.nvim",
   version = "^1.0.0",
   cmd = "ASToggle",
-  event = { "BufEnter" },
+  event = "BufEnter",
   opts = {
     enabled = true,
     trigger_events = {

@@ -1,6 +1,6 @@
 return {
   "LuxVim/nvim-luxmotion",
-  event = { "VeryLazy" },
+  event = "UIEnter",
   config = function()
     require("luxmotion").setup({
       cursor = { enabled = false },
