@@ -3,7 +3,7 @@ import type { FinickyConfig } from "/Applications/Finicky.app/Contents/Resources
 export default {
     defaultBrowser: (url) => ({
         name: "Waterfox",
-        args: ["--new", "--args", "-P", "default", url.toString()],
+        args: ["--new", "--args", "-P", "default-release", url.toString()],
     }),
     handlers: [
         {
