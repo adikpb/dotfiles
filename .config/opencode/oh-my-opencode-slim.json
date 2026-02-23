@@ -1,0 +1,76 @@
+{
+    "preset": "dynamic",
+    "presets": {
+        "dynamic": {
+            "oracle": {
+                "model": "opencode/glm-5-free",
+                "skills": [],
+                "mcps": []
+            },
+            "orchestrator": {
+                "model": "opencode/glm-5-free",
+                "skills": ["*"],
+                "mcps": ["websearch"]
+            },
+            "fixer": {
+                "model": "opencode/minimax-m2.5-free",
+                "skills": [],
+                "mcps": []
+            },
+            "designer": {
+                "model": "opencode/glm-5-free",
+                "skills": ["agent-browser"],
+                "mcps": []
+            },
+            "librarian": {
+                "model": "opencode/glm-5-free",
+                "skills": [],
+                "mcps": ["websearch", "context7", "grep_app"]
+            },
+            "explorer": {
+                "model": "opencode/minimax-m2.5-free",
+                "skills": [],
+                "mcps": []
+            }
+        }
+    },
+    "balanceProviderUsage": false,
+    "fallback": {
+        "enabled": true,
+        "timeoutMs": 15000,
+        "chains": {
+            "oracle": [
+                "opencode/glm-5-free",
+                "opencode/big-pickle",
+                "opencode/minimax-m2.5-free",
+                "opencode/gpt-5-nano"
+            ],
+            "orchestrator": [
+                "opencode/glm-5-free",
+                "opencode/big-pickle",
+                "opencode/minimax-m2.5-free",
+                "opencode/gpt-5-nano"
+            ],
+            "fixer": [
+                "opencode/minimax-m2.5-free",
+                "opencode/glm-5-free",
+                "opencode/big-pickle"
+            ],
+            "designer": [
+                "opencode/glm-5-free",
+                "opencode/minimax-m2.5-free",
+                "opencode/gpt-5-nano"
+            ],
+            "librarian": [
+                "opencode/glm-5-free",
+                "opencode/minimax-m2.5-free",
+                "opencode/big-pickle"
+            ],
+            "explorer": [
+                "opencode/minimax-m2.5-free",
+                "opencode/glm-5-free",
+                "opencode/trinity-large-preview-free"
+            ]
+        }
+    }
+}
