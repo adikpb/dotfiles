@@ -3,10 +3,8 @@ return {
   event = "LspAttach",
   opts = {
     autocmd = { enabled = true },
-    ignore = {
-      clients = {},
-      ft = {},
-      actions_without_kind = false,
-    },
+    code_lenses = true,
+    sign = {enabled = false},
+    float = {enabled = true}
   },
 }
