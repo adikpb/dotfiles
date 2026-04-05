@@ -25,9 +25,5 @@ return {
     formatters = {
       ["clang-format"] = { prepend_args = { "-style", "{IndentWidth: 4}" } },
     },
-    -- Set up format-on-save
-    format_after_save = {
-      async = true,
-    },
   },
 }
