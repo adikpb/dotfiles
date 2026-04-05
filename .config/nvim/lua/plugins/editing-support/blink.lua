@@ -2,7 +2,6 @@ return {
   "saghen/blink.cmp",
   dependencies = {
     "rafamadriz/friendly-snippets",
-    "Kaiser-Yang/blink-cmp-git",
   },
   version = "1.*",
   event = "VeryLazy",
@@ -73,16 +72,12 @@ return {
       },
     },
     sources = {
-      default = { "lazydev", "lsp", "path", "snippets", "git", "buffer" },
+      default = { "lazydev", "lsp", "path", "snippets", "buffer" },
       providers = {
         lazydev = {
           name = "LazyDev",
           module = "lazydev.integrations.blink",
           score_offset = 100,
-        },
-        git = {
-          name = "Git",
-          module = "blink-cmp-git",
         },
       },
     },
@@ -94,7 +89,7 @@ return {
     local client_cap = vim.lsp.protocol.make_client_capabilities()
     temp_conf.capabilities = blink_cmp.get_lsp_capabilities(client_cap)
     vim.lsp.config("*", temp_conf)
-    vim.lsp.enable(vim.tbl_keys(LSP_SERVERS))
+    vim.lsp.enable(LSP_SERVERS)
 
     blink_cmp.setup(opts)
   end,
