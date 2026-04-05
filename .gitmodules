@@ -1,0 +1,3 @@
+[submodule ".config/opencode/plugins/oh-my-opencode-slim"]
+	path = .config/opencode/plugins/oh-my-opencode-slim
+	url = git@github.com:adikpb/oh-my-opencode-slim.git

@@ -1,76 +1,50 @@
 {
-    "preset": "dynamic",
+    "$schema": "https://raw.githubusercontent.com/alvinunreal/oh-my-opencode-slim/refs/heads/master/oh-my-opencode-slim.schema.json",
+    "preset": "best",
     "presets": {
-        "dynamic": {
-            "oracle": {
-                "model": "opencode/glm-5-free",
-                "skills": [],
-                "mcps": []
-            },
+        "best": {
             "orchestrator": {
-                "model": "opencode/glm-5-free",
-                "skills": ["*"],
-                "mcps": ["websearch"]
+                "model": "opencode/qwen3.6-plus-free",
+                "variant": "high"
             },
-            "fixer": {
-                "model": "opencode/minimax-m2.5-free",
-                "skills": [],
-                "mcps": []
-            },
-            "designer": {
-                "model": "opencode/glm-5-free",
-                "skills": ["agent-browser"],
-                "mcps": []
+            "oracle": {
+                "model": "iflowcn/qwen3-235b-a22b-thinking-2507",
+                "variant": "high"
             },
             "librarian": {
-                "model": "opencode/glm-5-free",
-                "skills": [],
-                "mcps": ["websearch", "context7", "grep_app"]
+                "model": "zenmux/stepfun/step-3.5-flash-free",
+                "variant": "low"
             },
             "explorer": {
-                "model": "opencode/minimax-m2.5-free",
-                "skills": [],
-                "mcps": []
+                "model": "openrouter/stepfun/step-3.5-flash:free"
+            },
+            "designer": {
+                "model": "zenmux/z-ai/glm-4.6v-flash-free"
+            },
+            "fixer": {
+                "model": "opencode/minimax-m2.5-free"
             }
         }
     },
-    "balanceProviderUsage": false,
-    "fallback": {
-        "enabled": true,
-        "timeoutMs": 15000,
-        "chains": {
-            "oracle": [
-                "opencode/glm-5-free",
-                "opencode/big-pickle",
-                "opencode/minimax-m2.5-free",
-                "opencode/gpt-5-nano"
-            ],
-            "orchestrator": [
-                "opencode/glm-5-free",
-                "opencode/big-pickle",
-                "opencode/minimax-m2.5-free",
-                "opencode/gpt-5-nano"
-            ],
-            "fixer": [
-                "opencode/minimax-m2.5-free",
-                "opencode/glm-5-free",
-                "opencode/big-pickle"
-            ],
-            "designer": [
-                "opencode/glm-5-free",
-                "opencode/minimax-m2.5-free",
-                "opencode/gpt-5-nano"
-            ],
-            "librarian": [
-                "opencode/glm-5-free",
-                "opencode/minimax-m2.5-free",
-                "opencode/big-pickle"
-            ],
-            "explorer": [
-                "opencode/minimax-m2.5-free",
-                "opencode/glm-5-free",
-                "opencode/trinity-large-preview-free"
-            ]
+    "council": {
+        "master": {
+            "model": "openrouter/qwen/qwen3.6-plus:free",
+            "variant": "high"
+        },
+        "presets": {
+            "default": {
+                "alpha": {
+                    "model": "zenmux/xiaomi/mimo-v2-flash-free",
+                    "variant": "high"
+                },
+                "beta": {
+                    "model": "friendli/zai-org/GLM-4.7"
+                },
+                "gamma": {
+                    "model": "privatemode-ai/gpt-oss-120b",
+                    "variant": "medium"
+                }
+            }
         }
     }
 }
