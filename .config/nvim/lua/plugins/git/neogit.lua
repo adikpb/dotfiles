@@ -1,9 +1,11 @@
 return {
   "NeogitOrg/neogit",
   dependencies = {
-    "sindrets/diffview.nvim",
+    "esmuellert/codediff.nvim",
     "folke/snacks.nvim",
   },
   keys = { { "<leader>gg", "<cmd>Neogit<cr>", desc = "[N]eo [G]it" } },
-  config = true,
+  ---@module "neogit"
+  ---@type NeogitConfig
+  opts = { graph_style = "kitty", process_spinner = true },
 }
