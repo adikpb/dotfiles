@@ -2,8 +2,12 @@ import json
 import pprint
 import re
 import subprocess
+import urllib.request
 import pathlib
 from typing import Any, TypedDict, cast
+
+
+API_URL = "https://models.dev/api.json"
 
 
 class APIDef(TypedDict):
@@ -65,27 +69,53 @@ class Model(TypedDict):
     variants: dict[str, str]
 
 
+class RawAPIModel(TypedDict):
+    id: str
+    name: str
+    family: str | None
+    attachment: bool
+    reasoning: bool
+    tool_call: bool
+    temperature: bool
+    knowledge: str | None
+    release_date: str
+    last_updated: str
+    modalities: dict[str, list[str]]
+    open_weights: bool
+    cost: dict[str, float]
+    limit: dict[str, int]
+    status: str | None
+
+
+class RawAPIProvider(TypedDict):
+    id: str
+    name: str
+    npm: str
+    api: str
+    doc: str
+    models: dict[str, RawAPIModel]
+
+
 Models = dict[str, dict[str, Model]]
 
 
 CURR_DIR = pathlib.Path(".").resolve()
 MINIMUM_CONTEXT_WINDOW_SIZE = 128_000
-MINIMUM_OUTPUT_LENGTH = 64_000
+MINIMUM_OUTPUT_LENGTH = 32_000
 PROVIDER_ID_BLACKLIST = {
     "aihubmix",
     "alibaba-coding-plan",
     "alibaba-coding-plan-cn",
     "github-copilot",
     "gitlab",
+    "iflowcn",
     "kilo",
     "lmstudio",
-    "minimax-cn-coding-plan",
-    "minimax-coding-plan",
     "nova",
     "nvidia",
-    "ollama-cloud",
-    "qiniu-ai",
+    "openrouter",
     "zai-coding-plan",
+    "zenmux",
     "zhipuai-coding-plan",
 }
 
@@ -182,14 +212,99 @@ def parse_cli_output(text: str) -> Models:
     return result
 
 
+def _modalities_from(modality_list: list[str]) -> dict[str, bool]:
+    return {
+        "text": "text" in modality_list,
+        "audio": "audio" in modality_list,
+        "image": "image" in modality_list,
+        "video": "video" in modality_list,
+        "pdf": "pdf" in modality_list,
+    }
+
+
+def convert_raw_to_model(provider_id: str, model_id: str, raw: RawAPIModel) -> Model:
+    modalities = raw.get("modalities") or {}
+    caps: dict[str, Any] = {
+        "temperature": raw.get("temperature", True),
+        "reasoning": raw.get("reasoning", False),
+        "attachment": raw.get("attachment", False),
+        "toolcall": raw.get("tool_call", True),
+        "input": _modalities_from(modalities.get("input", [])),
+        "output": _modalities_from(modalities.get("output", [])),
+        "interleaved": False,
+    }
+
+    cost = raw.get("cost") or {}
+    limit = raw.get("limit") or {}
+
+    return {
+        "id": raw.get("id", model_id),
+        "providerID": provider_id,
+        "name": raw.get("name", model_id),
+        "api": {"id": "", "url": "", "npm": ""},
+        "status": raw.get("status") or "active",
+        "headers": {},
+        "options": {},
+        "cost": {
+            "input": cost.get("input", 0),
+            "output": cost.get("output", 0),
+            "cache": {"read": 0, "write": 0},
+        },
+        "limit": {
+            "context": limit.get("context", 0),
+            "output": limit.get("output", 0),
+        },
+        "capabilities": caps,
+        "release_date": raw.get("release_date", ""),
+        "variants": {},
+    }
+
+
+def fetch_api_models() -> Models:
+    """Fetch models from the API URL for additional providers."""
+    request = urllib.request.Request(API_URL)
+    request.add_header("User-Agent", "Mozilla/5.0 (compatible; free-models/1.0)")
+    with urllib.request.urlopen(request) as response:
+        raw_data: dict[str, RawAPIProvider] = json.load(response)
+
+    result: Models = {}
+    for provider_id, provider in raw_data.items():
+        provider_models: dict[str, Model] = {}
+        for model_id, raw_model in provider.get("models", {}).items():
+            full_key = f"{provider_id}/{model_id}"
+            try:
+                provider_models[model_id] = convert_raw_to_model(
+                    provider_id, model_id, raw_model
+                )
+            except Exception as e:
+                print(f"Skipping {full_key}: {e}")
+                continue
+        if provider_models:
+            result[provider_id] = provider_models
+
+    return result
+
+
 def fetch_models() -> Models:
+    # CLI has variants and API info; API has more providers
     result = subprocess.run(
         ["opencode", "models", "--refresh", "--verbose"],
         capture_output=True,
         text=True,
         check=True,
     )
-    return parse_cli_output(result.stdout)
+    cli_models = parse_cli_output(result.stdout)
+    api_models = fetch_api_models()
+
+    # Merge: CLI primary, API fills gaps
+    for pid, models in api_models.items():
+        if pid not in cli_models:
+            cli_models[pid] = models
+        else:
+            cli_models[pid] |= {
+                mid: m for mid, m in models.items() if mid not in cli_models[pid]
+            }
+    return cli_models
 
 
 def main() -> None:
@@ -221,13 +336,32 @@ def main() -> None:
             inverted.setdefault(model_name, {})[provider_key] = model
 
     with open(CURR_DIR / "free-models.json", "w") as f:
-        json.dump(filtered, f, sort_keys=True, separators=(",", ":"))
+        json.dump(filtered, f, sort_keys=True, indent=2)
 
     with open(CURR_DIR / "free-models-by-model.json", "w") as f:
-        json.dump(inverted, f, sort_keys=True, separators=(",", ":"))
+        json.dump(inverted, f, sort_keys=True, indent=2)
 
     unique_models: set[str] = {model.upper() for model in inverted}
     pprint.pprint(sorted(unique_models), compact=True, width=120)
+
+    # Providers with free models in API but not in CLI
+    cli_providers: set[str] = set()
+    result = subprocess.run(
+        ["opencode", "models"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    for line in result.stdout.strip().split("\n"):
+        if "/" in line:
+            cli_providers.add(line.split("/")[0])
+
+    api_only_providers = sorted(set(filtered.keys()) - cli_providers)
+    if api_only_providers:
+        print("\n--- Free providers in API but not in CLI ---")
+        print("NOTE: You need login to these providers to see their model variants.")
+        for p in api_only_providers:
+            print(f"  - {p}")
 
 
 if __name__ == "__main__":
