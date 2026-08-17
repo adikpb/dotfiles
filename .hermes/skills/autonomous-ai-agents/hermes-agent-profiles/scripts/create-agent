@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ──────────────────────────────────────────────
+# create-agent — Create a new specialized Hermes agent
+# Usage: create-agent <name> [description]
+#   <name>        Profile name (e.g., coder, research, osint)
+#   [description] Short description (e.g., "Web Developer Agent")
+#
+# Creates:
+#   - Hermes profile cloned from main (not from scratch)
+#   - Alias command (~/.local/bin/<name>)
+#   - Work directory at ~/Desktop/hermes/<name>/
+#   - Symlinked .env (secrets stay in sync with main)
+#   - SOUL.md generator (paste content when prompted)
+#
+# After creation, run hermes-sync after any main config change.
+# ──────────────────────────────────────────────
+
+if [ $# -lt 1 ]; then
+  echo "Usage: create-agent <name> [description]"
+  echo "  e.g.  create-agent coder 'Web Dev Agent'"
+  echo "        create-agent researcher"
+  echo "        create-agent osint"
+  exit 1
+fi
+
+NAME="$1"
+DESC="${2:-$NAME agent}"
+WORK_DIR="$HOME/Desktop/hermes/$NAME"
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Creating agent: $NAME"
+echo "  Description:   $DESC"
+echo "  Work dir:      $WORK_DIR"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# 1. Create work directory
+mkdir -p "$WORK_DIR"
+
+# 2. Remove old profile if exists, then clone from main
+#    Using hermes -p (not bare alias) for script safety
+echo ""
+echo "📋 Cloning from main profile..."
+hermes profile delete "$NAME" --yes 2>/dev/null || true
+hermes profile create "$NAME" --clone
+hermes profile alias "$NAME" 2>/dev/null || true
+
+# 3. Lock CWD to the desktop work directory
+hermes -p "$NAME" config set terminal.cwd "$WORK_DIR"
+
+# 4. Symlink .env to main (secrets stay in sync)
+echo ""
+echo "🔗 Symlinking .env to main profile..."
+MAIN_ENV="$HOME/.hermes/.env"
+CHILD_ENV="$HOME/.hermes/profiles/$NAME/.env"
+if [ -f "$MAIN_ENV" ]; then
+  mv "$CHILD_ENV" "$CHILD_ENV.bak" 2>/dev/null || true
+  ln -sf "$MAIN_ENV" "$CHILD_ENV"
+  echo "   ✅ .env → main profile"
+else
+  echo "   ⚠️  No main .env found — skipping"
+fi
+
+# 5. Prompt for SOUL.md (personality/instructions)
+echo ""
+echo "🧠 SOUL.md (personality/instructions)"
+echo "   Paste your SOUL.md content below, then press Ctrl+D."
+echo "   Or press Ctrl+D with nothing to skip (uses cloned personality)."
+echo ""
+SOUL_FILE="$HOME/.hermes/profiles/$NAME/SOUL.md"
+CONTENT=$(cat) || true
+if [ -n "$CONTENT" ]; then
+  echo "$CONTENT" > "$SOUL_FILE"
+  echo "   ✅ SOUL.md written"
+else
+  echo "   Skipped — using cloned personality"
+fi
+
+# 6. Verify
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  ✅ Agent '$NAME' ready!"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "   Run:     $NAME"
+echo "   Dir:     $WORK_DIR"
+echo "   Config:  hermes -p $NAME config ..."
+echo "   Skills:  hermes -p $NAME skills install ..."
+echo ""
+echo "   After changing main config, sync all agents:"
+echo "     hermes-sync"

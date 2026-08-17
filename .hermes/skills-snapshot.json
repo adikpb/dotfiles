@@ -1,0 +1,31 @@
+{
+  "hermes_version": "0.1.0",
+  "exported_at": "2026-08-17T05:59:01.792411+00:00",
+  "skills": [
+    {
+      "name": "obliteratus",
+      "source": "official",
+      "identifier": "official/mlops/obliteratus",
+      "category": "mlops"
+    },
+    {
+      "name": "yuanbao",
+      "source": "official",
+      "identifier": "official/yuanbao",
+      "category": ""
+    },
+    {
+      "name": "lm-studio",
+      "source": "clawhub",
+      "identifier": "lm-studio",
+      "category": ""
+    },
+    {
+      "name": "simple-english",
+      "source": "official",
+      "identifier": "official/creative/simple-english",
+      "category": "creative"
+    }
+  ],
+  "taps": []
+}
