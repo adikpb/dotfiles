@@ -1,4 +1,14 @@
+#:schema https://raw.githubusercontent.com/joshmedeski/sesh/refs/heads/main/sesh.schema.json
 [[session]]
 name = "Dotfiles"
 path = "~/dotfiles/"
 startup_command = "nvim ."
+
+[[session]]
+name = "kitty-conf"
+path = "~/dotfiles/.config/kitty/"
+startup_command = "nvim ."
+
+[tui]
+show_icons = true
+
