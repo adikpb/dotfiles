@@ -302,6 +302,7 @@ return {
         Snacks.toggle.inlay_hints():map("<leader>th")
         Snacks.toggle.dim():map("<leader>tD")
       end,
+      once = true,
     })
   end,
 }
