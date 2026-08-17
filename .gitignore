@@ -3,3 +3,9 @@ Session.vim
 
 # Lazy Package Manager
 lazy-lock.json
+
+# macOS
+.DS_Store
+
+# Local Hermes notes / plans
+.hermes/
