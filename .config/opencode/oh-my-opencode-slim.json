@@ -4,33 +4,35 @@
     "presets": {
         "free": {
             "orchestrator": {
-                "model": "opencode/deepseek-v4-flash-free",
-                "variant": "high"
+                "model": "opencode/deepseek-v4-flash-free"
             },
             "oracle": {
-                "model": "opencode/deepseek-v4-flash-free",
+                "model": "opencode/big-pickle",
                 "variant": "max"
-            },
-            "librarian": {
-                "model": "opencode/mimo-v2.5-free"
             },
             "explorer": {
                 "model": "opencode/deepseek-v4-flash-free"
             },
-            "fixer": {
+            "librarian": {
                 "model": "opencode/deepseek-v4-flash-free"
+            },
+            "designer": {
+                "model": "opencode/mimo-v2.5-free",
+                "variant": "medium"
+            },
+            "fixer": {
+                "model": "opencode/laguna-s-2.1-free",
+                "variant": "high"
             },
             "observer": {
                 "model": "opencode/mimo-v2.5-free",
-                "options": {
-                    "reasoningEffort": "none"
-                }
+                "variant": "low"
             }
         }
     },
-    "disabled_agents": ["designer", "council"],
+
+    "disabled_agents": ["council"],
     "autoUpdate": false,
-    "disabled_mcps": ["websearch"],
     "multiplexer": {
         "type": "auto"
     }
