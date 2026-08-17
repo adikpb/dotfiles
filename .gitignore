@@ -7,5 +7,7 @@ lazy-lock.json
 # macOS
 .DS_Store
 
-# Local Hermes notes / plans
-.hermes/
+# Hermes: only config.yaml is tracked (stow . → ~/.hermes/config.yaml)
+.hermes/*
+!.hermes/.gitignore
+!.hermes/config.yaml

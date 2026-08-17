@@ -1,0 +1,299 @@
+model:
+  default: grok-4.6
+  provider: xai-oauth
+  base_url: https://api.x.ai/v1
+credential_pool_strategies:
+  gemini: least_used
+  opencode-zen: fill_first
+terminal:
+  backend: local
+web:
+  backend: exa
+  use_gateway: false
+browser:
+  cloud_provider: local
+  use_gateway: false
+auxiliary:
+  vision:
+    provider: lmstudio
+    model: lfm2.5-vl-3b-mlx
+  web_extract:
+    provider: lmstudio
+    model: qwen3.5-4b-mlx
+  compression:
+    provider: auto
+    model: ''
+  skills_hub:
+    provider: auto
+    model: ''
+  approval:
+    provider: lmstudio
+    model: lfm2.5-2.6b-mlx
+  title_generation:
+    provider: lmstudio
+    model: lfm2.5-vl-3b-mlx
+  triage_specifier:
+    provider: lmstudio
+    model: qwen3.5-4b-mlx
+  kanban_decomposer:
+    provider: lmstudio
+    model: qwen3.5-4b-mlx
+  profile_describer:
+    provider: lmstudio
+    model: lfm2.5-vl-3b-mlx
+  curator:
+    provider: auto
+    model: ''
+display:
+  interface: tui
+  bell_on_complete: true
+  show_reasoning: true
+  tool_progress: verbose
+dashboard:
+  theme: midnight
+  font: theme
+tts:
+  provider: kittentts
+  use_gateway: false
+stt:
+  local:
+    model: tiny
+moa:
+  presets:
+    default:
+      reference_models:
+        - provider: openai-codex
+          model: gpt-5.5
+          enabled: true
+        - provider: openrouter
+          model: deepseek/deepseek-v4-pro
+          enabled: true
+      enabled: false
+      degraded_reference_policy: loud
+      fanout: user_turn
+  reference_models:
+    - provider: openai-codex
+      model: gpt-5.5
+      enabled: true
+    - provider: openrouter
+      model: deepseek/deepseek-v4-pro
+      enabled: true
+  aggregator:
+    provider: openrouter
+    model: anthropic/claude-opus-4.8
+  degraded_reference_policy: loud
+  max_tokens: 4096
+  fanout: user_turn
+  enabled: false
+skills:
+  disabled:
+    - audiocraft-audio-generation
+    - box
+    - colab-cli-advanced-workflows
+    - colab-cli-connect
+    - competitor-news-monitor
+    - diagnose-hermes-tool-availability
+    - document-to-action-items
+    - email-inbox-triage
+    - hermes-desktop-plugins
+    - hermes-themes
+    - machine-validated-json-output
+    - macos-vision-ocr
+    - meeting-action-items
+    - product-price-monitor
+    - segment-anything-model
+    - static-to-agentic-llm-upgrade
+    - structured-llm-display
+    - uv-python-project-init
+    - web-ui-debugging
+    - weekly-review-planning
+curator:
+  consolidate: true
+  prune_builtins: false
+_config_version: 37
+session_reset:
+  mode: none
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - context_engine
+    - delegation
+    - file
+    - hermes-opencode
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - vision
+    - web
+known_plugin_toolsets:
+  cli:
+    - hermes-opencode
+plugins:
+  enabled:
+    - disk-cleanup
+    - security-guidance
+    - web/exa
+  disabled:
+    - browser/browser_use
+    - browser/browserbase
+    - browser/firecrawl
+    - cron_providers/chronos
+    - dashboard_auth/basic
+    - dashboard_auth/drain
+    - dashboard_auth/nous
+    - dashboard_auth/self_hosted
+    - google_meet
+    - hermes-opencode
+    - image_gen/deepinfra
+    - image_gen/fal
+    - image_gen/krea
+    - image_gen/openai
+    - image_gen/openai-codex
+    - image_gen/openrouter
+    - image_gen/xai
+    - model-providers/actual
+    - model-providers/ai-gateway
+    - model-providers/alibaba
+    - model-providers/alibaba-coding-plan
+    - model-providers/anthropic
+    - model-providers/arcee
+    - model-providers/azure-foundry
+    - model-providers/bedrock
+    - model-providers/copilot
+    - model-providers/copilot-acp
+    - model-providers/custom
+    - model-providers/deepinfra
+    - model-providers/deepseek
+    - model-providers/fireworks
+    - model-providers/gemini
+    - model-providers/gmi
+    - model-providers/huggingface
+    - model-providers/kilocode
+    - model-providers/kimi-coding
+    - model-providers/minimax
+    - model-providers/nous
+    - model-providers/novita
+    - model-providers/nvidia
+    - model-providers/ollama-cloud
+    - model-providers/openai-codex
+    - model-providers/opencode-zen
+    - model-providers/openrouter
+    - model-providers/qwen-oauth
+    - model-providers/stepfun
+    - model-providers/upstage
+    - model-providers/vertex
+    - model-providers/xai
+    - model-providers/xiaomi
+    - model-providers/zai
+    - observability/langfuse
+    - observability/nemo_relay
+    - platforms/a2a
+    - platforms/buzz
+    - platforms/dingtalk
+    - platforms/discord
+    - platforms/email
+    - platforms/feishu
+    - platforms/google_chat
+    - platforms/homeassistant
+    - platforms/irc
+    - platforms/line
+    - platforms/matrix
+    - platforms/mattermost
+    - platforms/ntfy
+    - platforms/photon
+    - platforms/raft
+    - platforms/simplex
+    - platforms/slack
+    - platforms/sms
+    - platforms/teams
+    - platforms/telegram
+    - platforms/wecom
+    - platforms/whatsapp
+    - spotify
+    - teams_pipeline
+    - video_gen/deepinfra
+    - video_gen/fal
+    - video_gen/xai
+    - web/brave_free
+    - web/ddgs
+    - web/firecrawl
+    - web/parallel
+    - web/searxng
+    - web/tavily
+    - web/xai
+  entries:
+    hermes-opencode:
+      allow_tool_override: false
+      allow_gateway_injection: true
+known_builtin_toolsets:
+  cli:
+    - bfl
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - context_engine
+    - cronjob
+    - delegation
+    - discord
+    - discord_admin
+    - file
+    - homeassistant
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - spotify
+    - stt
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+
+# ── Security ──────────────────────────────────────────────────────────
+# Secret redaction is ON by default — strings that look like API keys,
+# tokens, and passwords are masked in tool output, logs, and chat
+# responses before the model or user ever sees them. Set redact_secrets
+# to false to disable (e.g. when developing the redactor itself).
+# tirith pre-exec scanning is enabled by default when the tirith binary
+# is available. Configure via security.tirith_* keys or env vars
+# (TIRITH_ENABLED, TIRITH_BIN, TIRITH_TIMEOUT, TIRITH_FAIL_OPEN).
+#
+# security:
+#   redact_secrets: true
+#   tirith_enabled: true
+#   tirith_path: "tirith"
+#   tirith_timeout: 5
+#   tirith_fail_open: true
+
+# ── Fallback Model ────────────────────────────────────────────────────
+# Automatic provider failover when primary is unavailable.
+# Uncomment and configure to enable. Triggers on rate limits (429),
+# overload (529), service errors (503), or connection failures.
+#
+# Supported providers:
+#   openrouter   (OPENROUTER_API_KEY)  — routes to any model
+#   openai-codex (OAuth — hermes auth) — OpenAI Codex
+#   nous         (OAuth — hermes auth) — Nous Portal
+#   zai          (ZAI_API_KEY)         — Z.AI / GLM
+#   kimi-coding  (KIMI_API_KEY)        — Kimi / Moonshot
+#   kimi-coding-cn (KIMI_CN_API_KEY)   — Kimi / Moonshot (China)
+#   minimax      (MINIMAX_API_KEY)     — MiniMax
+#   minimax-cn   (MINIMAX_CN_API_KEY)  — MiniMax (China)
+#   bedrock      (AWS IAM / boto3)     — AWS Bedrock (Converse API)
+#
+# For custom OpenAI-compatible endpoints, add base_url and key_env.
+#
+# fallback_model:
+#   provider: openrouter
+#   model: anthropic/claude-sonnet-4
