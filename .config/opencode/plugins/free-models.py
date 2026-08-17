@@ -107,17 +107,38 @@ PROVIDER_ID_BLACKLIST = {
     "alibaba-coding-plan",
     "alibaba-coding-plan-cn",
     "github-copilot",
+    "github-models",
     "gitlab",
+    "huggingface",
     "iflowcn",
+    "jiekou",
     "kilo",
+    "kimi-for-coding",
+    "kuae-cloud-coding-plan",
+    "llmgateway",
     "lmstudio",
+    "minimax-cn-coding-plan",
+    "minimax-coding-plan",
+    "modelscope",
     "nova",
     "nvidia",
-    "openrouter",
+    "poe",
+    "privatemode-ai",
+    "qiniu-ai",
+    "siliconflow-cn",
+    "tencent-coding-plan",
+    "tencent-tokenhub",
+    "the-grid-ai",
+    "wafer.ai",
+    "xiaomi-token-plan-ams",
+    "xiaomi-token-plan-cn",
+    "xiaomi-token-plan-sgp",
     "zai-coding-plan",
     "zenmux",
+    "zhipuai",
     "zhipuai-coding-plan",
 }
+MODEL_BLACKLIST = {"nemotron"}
 
 
 def validate_model(key: str, data: dict[str, Any]) -> Model:
@@ -169,8 +190,10 @@ def include(model: Model) -> bool:
     caps = model.get("capabilities") or {}
     limit = model.get("limit") or {}
     cost = model.get("cost") or {}
+    blacklisted = not any(True for m in MODEL_BLACKLIST if m in model.get("name").lower())
     return (
-        cost.get("input", 1) == 0
+        blacklisted
+        and cost.get("input", 1) == 0
         and cost.get("output", 1) == 0
         and bool(caps.get("reasoning", False))
         and bool(caps.get("toolcall", False))
@@ -179,6 +202,7 @@ def include(model: Model) -> bool:
         and bool((caps.get("input") or {}).get("text", False))
         and bool((caps.get("output") or {}).get("text", False))
         and model.get("status") != "deprecated"
+        and model.get("status") != "alpha"
     )
 
 
@@ -187,12 +211,16 @@ def clean_model(model: Model) -> dict[str, Any]:
     caps = model.get("capabilities") or {}
     inp: dict[str, Any] = caps.get("input") or {}
 
-    return {
+    ret = {
         "context": limit.get("context"),
-        "output": limit.get("output"),
         "input": [modality for modality, supported in inp.items() if supported],
-        "variants": model.get("variants") or {},
+        "variants": [i for i in (model.get("variants") or {})],
     }
+
+    if ret.get("variants") == []:
+        ret.pop("variants")
+
+    return ret
 
 
 def parse_cli_output(text: str) -> Models:
@@ -327,23 +355,6 @@ def main() -> None:
             continue
         filtered[provider_id] = {"models": filtered_models}
 
-    # inverted: model -> provider
-    inverted: dict[str, dict[str, dict[str, Any]]] = {}
-    for provider_id, provider in filtered.items():
-        for model_id, model in provider["models"].items():
-            org, _, model_name = model_id.rpartition("/")
-            provider_key = f"{provider_id}/{org}" if org else provider_id
-            inverted.setdefault(model_name, {})[provider_key] = model
-
-    with open(CURR_DIR / "free-models.json", "w") as f:
-        json.dump(filtered, f, sort_keys=True, indent=2)
-
-    with open(CURR_DIR / "free-models-by-model.json", "w") as f:
-        json.dump(inverted, f, sort_keys=True, indent=2)
-
-    unique_models: set[str] = {model.upper() for model in inverted}
-    pprint.pprint(sorted(unique_models), compact=True, width=120)
-
     # Providers with free models in API but not in CLI
     cli_providers: set[str] = set()
     result = subprocess.run(
@@ -357,11 +368,34 @@ def main() -> None:
             cli_providers.add(line.split("/")[0])
 
     api_only_providers = sorted(set(filtered.keys()) - cli_providers)
+
+    # Only include models from CLI providers in JSON files
+    cli_only_filtered = {pid: filtered[pid] for pid in filtered if pid in cli_providers}
+
+    # inverted: model -> provider (only CLI providers)
+    inverted: dict[str, dict[str, dict[str, Any]]] = {}
+    for provider_id, provider in cli_only_filtered.items():
+        for model_id, model in provider["models"].items():
+            org, _, model_name = model_id.rpartition("/")
+            provider_key = f"{provider_id}/{org}" if org else provider_id
+            inverted.setdefault(model_name, {})[provider_key] = model
+
+    with open(CURR_DIR / "free-models.json", "w") as f:
+        json.dump(cli_only_filtered, f, sort_keys=True, indent=2)
+
+    with open(CURR_DIR / "free-models-by-model.json", "w") as f:
+        json.dump(inverted, f, sort_keys=True, indent=2)
+
+    pprint.pprint(sorted({m.upper() for m in inverted}), compact=True, width=120)
+
     if api_only_providers:
         print("\n--- Free providers in API but not in CLI ---")
         print("NOTE: You need login to these providers to see their model variants.")
         for p in api_only_providers:
-            print(f"  - {p}")
+            models = sorted(filtered[p]["models"].keys())
+            print(f"  {p}")
+            for m in models:
+                print(f"    - {m}")
 
 
 if __name__ == "__main__":
