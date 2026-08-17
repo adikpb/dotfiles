@@ -8,12 +8,12 @@ fish_add_path -g "/usr/local/bin"
 # rustup
 fish_add_path -g "$(brew --prefix rustup)/bin"
 # uv
-fish_add_path -g "/Users/bijoykozhampurath/.local/bin"
+fish_add_path -g "$HOME/.local/bin"
 # Added by LM Studio CLI (lms)
-fish_add_path -g /Users/bijoykozhampurath/.lmstudio/bin
+fish_add_path -g "$HOME/.lmstudio/bin"
 # bun
 set -gx BUN_INSTALL "$HOME/.bun"
-fish_add_path -g $BUN_INSTALL/bin $PATH
+fish_add_path -g $BUN_INSTALL/bin
 
 if status is-interactive
     starship init fish | source
@@ -23,3 +23,4 @@ if status is-interactive
     uv generate-shell-completion fish | source
     uvx --generate-shell-completion fish | source
 end
+
