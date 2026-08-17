@@ -89,23 +89,14 @@ skills:
   disabled:
     - audiocraft-audio-generation
     - box
-    - colab-cli-advanced-workflows
-    - colab-cli-connect
     - competitor-news-monitor
-    - diagnose-hermes-tool-availability
     - document-to-action-items
     - email-inbox-triage
-    - hermes-desktop-plugins
-    - hermes-themes
-    - machine-validated-json-output
     - macos-vision-ocr
     - meeting-action-items
     - product-price-monitor
     - segment-anything-model
-    - static-to-agentic-llm-upgrade
-    - structured-llm-display
     - uv-python-project-init
-    - web-ui-debugging
     - weekly-review-planning
 curator:
   consolidate: true
