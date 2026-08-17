@@ -1,294 +1,157 @@
 # Task
 
-- Read the omo-slim.json understand how it is configured
-- Read the json for available models, infer what details will be useful for deciding how to use the model
-- Research on each model listed
-- Generate an omo-slim.json that is optimal, only update the fields for the models
+- Read and understand:
+    - omo-slim.json
+    - available model json
+- research on each model listed
+- generate an omo-slim.json that is optimal, only update the fields for the models
 
-## omo-slim.jsonc
+## Agent description
 
-```jsonc
+- **Orchestrator**: An AI coding orchestrator that delegates tasks to specialized agents (explorer, librarian, oracle, fixer) to optimize for quality, speed, cost, and reliability.
+- **Oracle**: A read-only strategic advisor for architecture decisions, complex debugging, code review, and simplification guidance.
+- **Librarian**: A research specialist that finds official docs, library examples, and codebase patterns from external sources.
+- **Explorer**: A read-only codebase search specialist that quickly locates files, symbols, and patterns via grep, glob, and AST queries.
+- **Fixer**: A fast, execution-only specialist that implements well-defined code changes without research or planning.
+
+## omo-slim.json
+
+```json
 {
-    "$schema": "https://raw.githubusercontent.com/alvinunreal/oh-my-opencode-slim/refs/heads/master/oh-my-opencode-slim.schema.json",
-    "preset": "best",
+    "preset": "openai",
     "presets": {
-        "best": {
+        "openai": {
             "orchestrator": {
-                "model": "openai/gpt-5.4",
+                "model": "openai/gpt-5.5-fast"
             },
             "oracle": {
-                "model": "openai/gpt-5.4",
-                "variant": "high",
+                "model": "openai/gpt-5.5-fast",
+                "variant": "high"
             },
             "librarian": {
-                "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
-                "variant": "low",
+                "model": "openai/gpt-5.3-codex-spark",
+                "variant": "low"
             },
             "explorer": {
-                "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
-                "variant": "low",
+                "model": "openai/gpt-5.3-codex-spark",
+                "variant": "low"
             },
-            "designer": {
-                "model": "github-copilot/gemini-3.1-pro-preview",
             },
             "fixer": {
-                "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
-                "variant": "low",
-            },
-        },
-    },
-    "council": {
-        "master": { "model": "openai/gpt-5.4" },
-        "presets": {
-            "default": {
-                "alpha": { "model": "github-copilot/claude-opus-4.6" },
-                "beta": { "model": "github-copilot/gemini-3.1-pro-preview" },
-                "gamma": {
-                    "model": "fireworks-ai/accounts/fireworks/routers/kimi-k2p5-turbo",
-                },
-            },
-        },
+                "model": "openai/gpt-5.3-codex-spark",
+                "variant": "low"
+            }
+        }
     },
 }
 ```
 
-## Available Models
+## Available models
 
 ```json
 {
-    "aihubmix": {
-        "models": {
-            "coding-glm-4.7-free": {
-                "context": 204800,
-                "input": ["text"],
-                "output": 131072,
-                "variants": {}
-            },
-            "coding-glm-5-free": {
-                "context": 204800,
-                "input": ["text"],
-                "output": 131072,
-                "variants": {}
-            },
-            "coding-minimax-m2.1-free": {
-                "context": 204800,
-                "input": ["text"],
-                "output": 131072,
-                "variants": {}
-            }
-        }
-    },
-    "friendli": {
-        "models": {
-            "zai-org/GLM-4.7": {
-                "context": 202752,
-                "input": ["text"],
-                "output": 202752,
-                "variants": {}
-            }
-        }
-    },
-    "iflowcn": {
-        "models": {
-            "glm-4.6": {
-                "context": 200000,
-                "input": ["text"],
-                "output": 128000,
-                "variants": {}
-            },
-            "qwen3-235b-a22b-thinking-2507": {
-                "context": 256000,
-                "input": ["text"],
-                "output": 64000,
-                "variants": {
-                    "high": { "reasoningEffort": "high" },
-                    "low": { "reasoningEffort": "low" },
-                    "medium": { "reasoningEffort": "medium" }
-                }
-            }
-        }
-    },
-    "opencode": {
-        "models": {
-            "big-pickle": {
-                "context": 200000,
-                "input": ["text"],
-                "output": 128000,
-                "variants": {
-                    "high": {
-                        "thinking": { "budgetTokens": 16000, "type": "enabled" }
-                    },
-                    "max": {
-                        "thinking": { "budgetTokens": 31999, "type": "enabled" }
-                    }
-                }
-            },
-            "gpt-5-nano": {
-                "context": 400000,
-                "input": ["text", "image"],
-                "output": 128000,
-                "variants": {
-                    "high": {
-                        "include": ["reasoning.encrypted_content"],
-                        "reasoningEffort": "high",
-                        "reasoningSummary": "auto"
-                    },
-                    "low": {
-                        "include": ["reasoning.encrypted_content"],
-                        "reasoningEffort": "low",
-                        "reasoningSummary": "auto"
-                    },
-                    "medium": {
-                        "include": ["reasoning.encrypted_content"],
-                        "reasoningEffort": "medium",
-                        "reasoningSummary": "auto"
-                    },
-                    "minimal": {
-                        "include": ["reasoning.encrypted_content"],
-                        "reasoningEffort": "minimal",
-                        "reasoningSummary": "auto"
-                    }
-                }
-            },
-            "minimax-m2.5-free": {
-                "context": 204800,
-                "input": ["text"],
-                "output": 131072,
-                "variants": {}
-            },
-            "nemotron-3-super-free": {
-                "context": 204800,
-                "input": ["text"],
-                "output": 128000,
-                "variants": {
-                    "high": { "reasoningEffort": "high" },
-                    "low": { "reasoningEffort": "low" },
-                    "medium": { "reasoningEffort": "medium" }
-                }
-            },
-            "qwen3.6-plus-free": {
-                "context": 1048576,
-                "input": ["text"],
-                "output": 64000,
-                "variants": {
-                    "high": { "reasoningEffort": "high" },
-                    "low": { "reasoningEffort": "low" },
-                    "medium": { "reasoningEffort": "medium" }
-                }
-            }
-        }
-    },
-    "openrouter": {
-        "models": {
-            "nvidia/nemotron-3-nano-30b-a3b:free": {
-                "context": 256000,
-                "input": ["text"],
-                "output": 256000,
-                "variants": {}
-            },
-            "nvidia/nemotron-3-super-120b-a12b:free": {
-                "context": 262144,
-                "input": ["text"],
-                "output": 262144,
-                "variants": {}
-            },
-            "nvidia/nemotron-nano-12b-v2-vl:free": {
-                "context": 128000,
-                "input": ["text", "image"],
-                "output": 128000,
-                "variants": {}
-            },
-            "nvidia/nemotron-nano-9b-v2:free": {
-                "context": 128000,
-                "input": ["text"],
-                "output": 128000,
-                "variants": {}
-            },
-            "qwen/qwen3.6-plus-preview:free": {
-                "context": 1000000,
-                "input": ["text"],
-                "output": 65536,
-                "variants": {}
-            },
-            "qwen/qwen3.6-plus:free": {
-                "context": 1000000,
-                "input": ["text", "image", "video"],
-                "output": 65536,
-                "variants": {}
-            },
-            "stepfun/step-3.5-flash:free": {
-                "context": 256000,
-                "input": ["text"],
-                "output": 256000,
-                "variants": {}
-            }
-        }
-    },
-    "privatemode-ai": {
-        "models": {
-            "gpt-oss-120b": {
-                "context": 128000,
-                "input": ["text"],
-                "output": 128000,
-                "variants": {
-                    "high": { "reasoningEffort": "high" },
-                    "low": { "reasoningEffort": "low" },
-                    "medium": { "reasoningEffort": "medium" }
-                }
-            }
-        }
-    },
-    "zai": {
-        "models": {
-            "glm-4.5-flash": {
-                "context": 131072,
-                "input": ["text"],
-                "output": 98304,
-                "variants": {}
-            },
-            "glm-4.7-flash": {
-                "context": 200000,
-                "input": ["text"],
-                "output": 131072,
-                "variants": {}
-            }
-        }
-    },
-    "zenmux": {
-        "models": {
-            "stepfun/step-3.5-flash-free": {
-                "context": 256000,
-                "input": ["text"],
-                "output": 64000,
-                "variants": {
-                    "high": { "reasoningEffort": "high" },
-                    "low": { "reasoningEffort": "low" },
-                    "medium": { "reasoningEffort": "medium" }
-                }
-            },
-            "xiaomi/mimo-v2-flash-free": {
-                "context": 262000,
-                "input": ["text"],
-                "output": 64000,
-                "variants": {
-                    "high": { "reasoningEffort": "high" },
-                    "low": { "reasoningEffort": "low" },
-                    "medium": { "reasoningEffort": "medium" }
-                }
-            },
-            "z-ai/glm-4.6v-flash-free": {
-                "context": 200000,
-                "input": ["text", "image", "video"],
-                "output": 64000,
-                "variants": {}
-            },
-            "z-ai/glm-4.7-flash-free": {
-                "context": 200000,
-                "input": ["text"],
-                "output": 64000,
-                "variants": {}
-            }
-        }
+  "opencode": {
+    "models": {
+      "big-pickle": {
+        "context": 200000,
+        "input": [
+          "text"
+        ]
+      },
+      "deepseek-v4-flash-free": {
+        "context": 200000,
+        "input": [
+          "text"
+        ],
+        "variants": [
+          "low",
+          "medium",
+          "high",
+          "max"
+        ]
+      },
+      "mimo-v2.5-free": {
+        "context": 200000,
+        "input": [
+          "text",
+          "audio",
+          "image",
+          "video"
+        ],
+        "variants": [
+          "low",
+          "medium",
+          "high"
+        ]
+      },
+      "minimax-m3-free": {
+        "context": 200000,
+        "input": [
+          "text",
+          "image",
+          "video"
+        ]
+      }
     }
+  },
+  "openrouter": {
+    "models": {
+      "google/gemma-4-26b-a4b-it:free": {
+        "context": 262144,
+        "input": [
+          "text",
+          "image",
+          "video"
+        ]
+      },
+      "google/gemma-4-31b-it:free": {
+        "context": 262144,
+        "input": [
+          "text",
+          "image",
+          "video"
+        ]
+      },
+      "moonshotai/kimi-k2.6:free": {
+        "context": 262144,
+        "input": [
+          "text",
+          "image"
+        ]
+      },
+      "openai/gpt-oss-120b:free": {
+        "context": 131072,
+        "input": [
+          "text"
+        ],
+        "variants": [
+          "none",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ]
+      },
+      "poolside/laguna-m.1:free": {
+        "context": 262144,
+        "input": [
+          "text"
+        ]
+      },
+      "poolside/laguna-xs.2:free": {
+        "context": 262144,
+        "input": [
+          "text"
+        ]
+      },
+      "z-ai/glm-4.5-air:free": {
+        "context": 131072,
+        "input": [
+          "text"
+        ]
+      }
+    }
+  }
 }
 ```

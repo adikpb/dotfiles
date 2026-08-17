@@ -1,50 +1,37 @@
 {
     "$schema": "https://raw.githubusercontent.com/alvinunreal/oh-my-opencode-slim/refs/heads/master/oh-my-opencode-slim.schema.json",
-    "preset": "best",
+    "preset": "free",
     "presets": {
-        "best": {
+        "free": {
             "orchestrator": {
-                "model": "opencode/qwen3.6-plus-free",
+                "model": "opencode/deepseek-v4-flash-free",
                 "variant": "high"
             },
             "oracle": {
-                "model": "iflowcn/qwen3-235b-a22b-thinking-2507",
-                "variant": "high"
+                "model": "opencode/deepseek-v4-flash-free",
+                "variant": "max"
             },
             "librarian": {
-                "model": "zenmux/stepfun/step-3.5-flash-free",
-                "variant": "low"
+                "model": "opencode/mimo-v2.5-free"
             },
             "explorer": {
-                "model": "openrouter/stepfun/step-3.5-flash:free"
-            },
-            "designer": {
-                "model": "zenmux/z-ai/glm-4.6v-flash-free"
+                "model": "opencode/deepseek-v4-flash-free"
             },
             "fixer": {
-                "model": "opencode/minimax-m2.5-free"
-            }
-        }
-    },
-    "council": {
-        "master": {
-            "model": "openrouter/qwen/qwen3.6-plus:free",
-            "variant": "high"
-        },
-        "presets": {
-            "default": {
-                "alpha": {
-                    "model": "zenmux/xiaomi/mimo-v2-flash-free",
-                    "variant": "high"
-                },
-                "beta": {
-                    "model": "friendli/zai-org/GLM-4.7"
-                },
-                "gamma": {
-                    "model": "privatemode-ai/gpt-oss-120b",
-                    "variant": "medium"
+                "model": "opencode/deepseek-v4-flash-free"
+            },
+            "observer": {
+                "model": "opencode/mimo-v2.5-free",
+                "options": {
+                    "reasoningEffort": "none"
                 }
             }
         }
+    },
+    "disabled_agents": ["designer", "council"],
+    "autoUpdate": false,
+    "disabled_mcps": ["websearch"],
+    "multiplexer": {
+        "type": "auto"
     }
 }
