@@ -15,6 +15,12 @@ fish_add_path -g "$HOME/.lmstudio/bin"
 set -gx BUN_INSTALL "$HOME/.bun"
 fish_add_path -g $BUN_INSTALL/bin
 
+# serve opencode on a port by default
+function omos -w opencode
+    set -l port (jot -r 1 49152 65535)
+    env OPENCODE_PORT="$port" opencode --port "$port" $argv
+end
+
 if status is-interactive
     starship init fish | source
     fzf --fish | source
