@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/bijoykozhampurath/.docker/bin"
+# End of Docker Desktop section.
+
 set -g fish_greeting ""
 set -gx EDITOR "nvim"
 ## change this - java home
@@ -15,17 +19,11 @@ fish_add_path -g "$HOME/.lmstudio/bin"
 set -gx BUN_INSTALL "$HOME/.bun"
 fish_add_path -g $BUN_INSTALL/bin
 
-# serve opencode on a port by default
-function omos -w opencode
-    set -l port (jot -r 1 49152 65535)
-    env OPENCODE_PORT="$port" opencode --port "$port" $argv
-end
-
 if status is-interactive
     starship init fish | source
+    enable_transience
     fzf --fish | source
     zoxide init fish | source
-    sesh completion fish | source
     uv generate-shell-completion fish | source
     uvx --generate-shell-completion fish | source
 end
