@@ -1,25 +1,24 @@
 model:
-  default: grok-4.6
-  provider: xai-oauth
-  base_url: https://api.x.ai/v1
+  base_url: https://inference-api.nousresearch.com/v1
+  default: upstage/solar-pro4:free
+  provider: nous
 credential_pool_strategies:
   gemini: least_used
   opencode-zen: fill_first
+agent:
+  reasoning_effort: medium
 terminal:
   backend: local
 web:
   backend: exa
   use_gateway: false
 browser:
+  backend: browser-use
   cloud_provider: local
-  use_gateway: false
 auxiliary:
   vision:
-    provider: lmstudio
-    model: lfm2.5-vl-3b-mlx
-  web_extract:
-    provider: lmstudio
-    model: qwen3.5-4b-mlx
+    provider: auto
+    model: ''
   compression:
     provider: auto
     model: ''
@@ -28,26 +27,27 @@ auxiliary:
     model: ''
   approval:
     provider: lmstudio
-    model: lfm2.5-2.6b-mlx
+    model: minicpm5-2b-mlx
   title_generation:
     provider: lmstudio
-    model: lfm2.5-vl-3b-mlx
+    model: minicpm5-2b-mlx-nothink
   triage_specifier:
     provider: lmstudio
-    model: qwen3.5-4b-mlx
+    model: minicpm5-2b-mlx
   kanban_decomposer:
     provider: lmstudio
-    model: qwen3.5-4b-mlx
+    model: minicpm5-2b-mlx
   profile_describer:
     provider: lmstudio
-    model: lfm2.5-vl-3b-mlx
+    model: minicpm5-2b-mlx
   curator:
     provider: auto
     model: ''
 display:
-  interface: tui
   bell_on_complete: true
+  bell_on_prompt: true
   show_reasoning: true
+  tool_preview_length: 0
   tool_progress: verbose
 dashboard:
   theme: midnight
@@ -87,43 +87,36 @@ moa:
   enabled: false
 skills:
   disabled:
-    - audiocraft-audio-generation
     - box
+    - codebase-inspection
     - competitor-news-monitor
     - document-to-action-items
+    - docx
     - email-inbox-triage
-    - macos-vision-ocr
+    - frontend-design
+    - huggingface-hub
+    - llm-wiki
     - meeting-action-items
+    - obliteratus
+    - opencode
+    - pdf
+    - powerpoint
     - product-price-monitor
-    - segment-anything-model
-    - uv-python-project-init
+    - python-debugpy
+    - reddit-reading
+    - requesting-code-review
+    - rss-feeds
     - weekly-review-planning
+    - xurl
+    - youtube-content
+    - yuanbao
 curator:
   consolidate: true
   prune_builtins: false
-_config_version: 37
-session_reset:
-  mode: none
-platform_toolsets:
-  cli:
-    - browser
-    - clarify
-    - code_execution
-    - context_engine
-    - delegation
-    - file
-    - hermes-opencode
-    - kanban
-    - memory
-    - session_search
-    - skills
-    - terminal
-    - todo
-    - vision
-    - web
-known_plugin_toolsets:
-  cli:
-    - hermes-opencode
+approvals:
+  destructive_slash_confirm: false
+command_allowlist:
+  - execute_code
 plugins:
   enabled:
     - disk-cleanup
@@ -143,6 +136,7 @@ plugins:
     - image_gen/deepinfra
     - image_gen/fal
     - image_gen/krea
+    - image_gen/meta-ai
     - image_gen/openai
     - image_gen/openai-codex
     - image_gen/openrouter
@@ -209,11 +203,14 @@ plugins:
     - teams_pipeline
     - video_gen/deepinfra
     - video_gen/fal
+    - video_gen/openrouter
     - video_gen/xai
     - web/brave_free
     - web/ddgs
     - web/firecrawl
+    - web/keenable
     - web/parallel
+    - web/perplexity
     - web/searxng
     - web/tavily
     - web/xai
@@ -221,13 +218,62 @@ plugins:
     hermes-opencode:
       allow_tool_override: false
       allow_gateway_injection: true
+telemetry:
+  shared_metrics:
+    enabled: false
+    send: false
+    offer_version: 2
+local_runtime:
+  enabled: false
+_config_version: 51
+session_reset:
+  mode: none
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - connections
+    - context_engine
+    - cronjob
+    - delegation
+    - file
+    - hermes-opencode
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - vision
+    - web
+  telegram:
+    - browser
+    - clarify
+    - code_execution
+    - connections
+    - context_engine
+    - cronjob
+    - delegation
+    - file
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - vision
+    - web
+known_plugin_toolsets:
+  cli:
+    - a2a
+  telegram:
+    - a2a
 known_builtin_toolsets:
   cli:
-    - bfl
     - browser
     - clarify
     - code_execution
     - computer_use
+    - connections
     - context_engine
     - cronjob
     - delegation
@@ -236,6 +282,7 @@ known_builtin_toolsets:
     - file
     - homeassistant
     - image_gen
+    - kanban
     - memory
     - session_search
     - skills
@@ -250,6 +297,242 @@ known_builtin_toolsets:
     - web
     - x_search
     - yuanbao
+  telegram:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - connections
+    - context_engine
+    - cronjob
+    - delegation
+    - discord
+    - discord_admin
+    - file
+    - homeassistant
+    - image_gen
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - spotify
+    - stt
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+tool_gateway_declined_tools:
+  - image_gen
+  - stt
+custom_providers:
+  - name: Api.orcarouter.ai
+    base_url: https://api.orcarouter.ai/v1
+    key_env: HERMES_CUSTOM_API_ORCAROUTER_AI_API_KEY
+    model: orcarouter/free
+    api_mode: chat_completions
+    models:
+      orcarouter/free: {}
+      orcarouter/fusion: {}
+      orcarouter/fusion-flash: {}
+      orcarouter/fusion-mini: {}
+      orcarouter/auto: {}
+      anthropic/claude-fable-5: {}
+      anthropic/claude-fable-5.1: {}
+      anthropic/claude-haiku-4.5: {}
+      anthropic/claude-opus-4.5: {}
+      anthropic/claude-opus-4.6: {}
+      anthropic/claude-opus-4.7: {}
+      anthropic/claude-opus-4.8: {}
+      anthropic/claude-opus-5: {}
+      anthropic/claude-sonnet-4.6: {}
+      anthropic/claude-sonnet-5: {}
+      codex-auto-review: {}
+      deepseek/deepseek-chat: {}
+      deepseek/deepseek-reasoner: {}
+      deepseek/deepseek-v4-flash: {}
+      deepseek/deepseek-v4-flash-0731: {}
+      deepseek/deepseek-v4-flash-free: {}
+      deepseek/deepseek-v4-flash-vision-exp: {}
+      deepseek/deepseek-v4-pro: {}
+      deepseek/deepseek-v4-pro-0813: {}
+      deepseek/deepseek-v4.1-flash: {}
+      google/gemini-2.5-flash: {}
+      google/gemini-2.5-flash-lite: {}
+      google/gemini-2.5-flash-preview-tts: {}
+      google/gemini-2.5-pro: {}
+      google/gemini-2.5-pro-preview-tts: {}
+      google/gemini-3-flash-preview: {}
+      google/gemini-3.1-flash-lite: {}
+      google/gemini-3.1-flash-lite-preview: {}
+      google/gemini-3.1-flash-tts-preview: {}
+      google/gemini-3.1-pro-preview: {}
+      google/gemini-3.1-pro-preview-customtools: {}
+      google/gemini-3.5-flash: {}
+      google/gemini-3.5-flash-lite: {}
+      google/gemini-3.6-flash: {}
+      google/gemini-3.8-flash: {}
+      google/gemini-embedding-001: {}
+      google/gemini-embedding-2-preview: {}
+      google/gemini-flash-latest: {}
+      google/gemini-flash-lite-latest: {}
+      google/gemini-pro-latest: {}
+      google/gemini-robotics-er-1.6-preview: {}
+      google/gemma-4-26b-a4b-it: {}
+      google/gemma-4-31b-it: {}
+      google/imagen-4.0-fast-generate-001: {}
+      google/imagen-4.0-generate-001: {}
+      google/imagen-4.0-ultra-generate-001: {}
+      gpt-5.6-luna: {}
+      grok/grok-4.3: {}
+      grok/grok-4.5: {}
+      grok/grok-4.6: {}
+      kimi/kimi-k2.5: {}
+      kimi/kimi-k2.6: {}
+      kimi/kimi-k2.7-code: {}
+      kimi/kimi-k3: {}
+      kling/kling-3-turbo: {}
+      kling/kling-v2-1-master: {}
+      kling/kling-v2-5-turbo: {}
+      kling/kling-v2-6: {}
+      kling/kling-v2-master: {}
+      kling/kling-v3: {}
+      kling/kling-v3-omni: {}
+      meta/muse-spark-1.1: {}
+      meta/muse-spark-1.2: {}
+      minimax/minimax-m2.5: {}
+      minimax/minimax-m2.5-highspeed: {}
+      minimax/minimax-m2.7: {}
+      minimax/minimax-m2.7-highspeed: {}
+      minimax/minimax-m3: {}
+      obsidian/gemma-4-26B-A4B: {}
+      obsidian/Qwen3.6-35B-A3B: {}
+      obsidian/Qwen3.8-27B: {}
+      openai/gpt-3.5-turbo: {}
+      openai/gpt-3.5-turbo-0125: {}
+      openai/gpt-3.5-turbo-1106: {}
+      openai/gpt-3.5-turbo-16k: {}
+      openai/gpt-4: {}
+      openai/gpt-4-0613: {}
+      openai/gpt-4-turbo: {}
+      openai/gpt-4-turbo-2024-04-09: {}
+      openai/gpt-4.1: {}
+      openai/gpt-4.1-2025-04-14: {}
+      openai/gpt-4.1-mini: {}
+      openai/gpt-4.1-mini-2025-04-14: {}
+      openai/gpt-4.1-nano: {}
+      openai/gpt-4.1-nano-2025-04-14: {}
+      openai/gpt-4o: {}
+      openai/gpt-4o-2024-05-13: {}
+      openai/gpt-4o-2024-08-06: {}
+      openai/gpt-4o-2024-11-20: {}
+      openai/gpt-4o-mini: {}
+      openai/gpt-4o-mini-2024-07-18: {}
+      openai/gpt-4o-mini-tts: {}
+      openai/gpt-4o-mini-tts-2025-03-20: {}
+      openai/gpt-4o-mini-tts-2025-12-15: {}
+      openai/gpt-5: {}
+      openai/gpt-5-2025-08-07: {}
+      openai/gpt-5-chat-latest: {}
+      openai/gpt-5-mini: {}
+      openai/gpt-5-mini-2025-08-07: {}
+      openai/gpt-5-nano: {}
+      openai/gpt-5-nano-2025-08-07: {}
+      openai/gpt-5-pro: {}
+      openai/gpt-5-pro-2025-10-06: {}
+      openai/gpt-5-search-api: {}
+      openai/gpt-5-search-api-2025-10-14: {}
+      openai/gpt-5.1: {}
+      openai/gpt-5.1-2025-11-13: {}
+      openai/gpt-5.1-chat-latest: {}
+      openai/gpt-5.1-codex: {}
+      openai/gpt-5.1-codex-mini: {}
+      openai/gpt-5.2: {}
+      openai/gpt-5.2-2025-12-11: {}
+      openai/gpt-5.2-chat-latest: {}
+      openai/gpt-5.2-codex: {}
+      openai/gpt-5.2-pro: {}
+      openai/gpt-5.2-pro-2025-12-11: {}
+      openai/gpt-5.3-codex: {}
+      openai/gpt-5.4: {}
+      openai/gpt-5.4-2026-03-05: {}
+      openai/gpt-5.4-mini: {}
+      openai/gpt-5.4-mini-2026-03-17: {}
+      openai/gpt-5.4-nano: {}
+      openai/gpt-5.4-nano-2026-03-17: {}
+      openai/gpt-5.4-pro: {}
+      openai/gpt-5.4-pro-2026-03-05: {}
+      openai/gpt-5.5: {}
+      openai/gpt-5.5-2026-04-23: {}
+      openai/gpt-5.5-pro: {}
+      openai/gpt-5.5-pro-2026-04-23: {}
+      openai/gpt-5.6-luna: {}
+      openai/gpt-5.6-sol: {}
+      openai/gpt-5.6-terra: {}
+      openai/gpt-6-astra: {}
+      openai/gpt-oss-120b: {}
+      openai/text-embedding-3-large: {}
+      openai/text-embedding-3-small: {}
+      openai/text-embedding-ada-002: {}
+      openai/tts-1: {}
+      openai/tts-1-1106: {}
+      openai/tts-1-hd: {}
+      openai/tts-1-hd-1106: {}
+      orca/orcaverify-text1.0: {}
+      orca/orcaverify-text1.0-free: {}
+      qwen/qwen3-max: {}
+      qwen/qwen3-max-preview: {}
+      qwen/qwen3-vl-235b-a22b-instruct: {}
+      qwen/qwen3-vl-235b-a22b-thinking: {}
+      qwen/qwen3-vl-8b-instruct: {}
+      qwen/qwen3-vl-8b-thinking: {}
+      qwen/qwen3.5-122b-a10b: {}
+      qwen/qwen3.5-27b: {}
+      qwen/qwen3.5-35b-a3b: {}
+      qwen/qwen3.5-397b-a17b: {}
+      qwen/qwen3.5-flash: {}
+      qwen/qwen3.5-flash-2026-02-23: {}
+      qwen/qwen3.5-plus: {}
+      qwen/qwen3.5-plus-2026-02-15: {}
+      qwen/qwen3.6-35b-a3b: {}
+      qwen/qwen3.6-flash: {}
+      qwen/qwen3.6-flash-2026-04-16: {}
+      qwen/qwen3.6-plus: {}
+      qwen/qwen3.6-plus-2026-04-02: {}
+      qwen/qwen3.7-flash: {}
+      qwen/qwen3.7-max: {}
+      qwen/qwen3.7-max-2026-05-20: {}
+      qwen/qwen3.7-plus: {}
+      qwen/qwen3.8-27b: {}
+      qwen/qwen3.8-flash: {}
+      qwen/qwen3.8-max: {}
+      qwen/qwen3.8-max-0902: {}
+      tencent/hy3: {}
+      tencent/hy3-free: {}
+      z-ai/glm-4.5: {}
+      z-ai/glm-4.5-air: {}
+      z-ai/glm-4.6: {}
+      z-ai/glm-4.7: {}
+      z-ai/glm-5: {}
+      z-ai/glm-5.1: {}
+      z-ai/glm-5.2: {}
+      z-ai/glm-5.3: {}
+      z-ai/glm-5.3-flash: {}
+      z-ai/glm-5.3-flash-free: {}
+      anthropic/claude-opus-5.5: {}
+      grok/grok-4.7: {}
+      openai/gpt-6-luna: {}
+      openai/gpt-6-sol: {}
+      typesafe/jev-1.13: {}
+      anthropic/claude-sonnet-5.5: {}
+      openai/gpt-6.1-sol: {}
+      tencent/hy4-preview: {}
+      tencent/hy4-preview-free: {}
+    models_discovered: true
 
 # ── Security ──────────────────────────────────────────────────────────
 # Secret redaction is ON by default — strings that look like API keys,
@@ -288,3 +571,8 @@ known_builtin_toolsets:
 # fallback_model:
 #   provider: openrouter
 #   model: anthropic/claude-sonnet-4
+update:
+  installs:
+    d4aaae96aef55867:
+      path: /Users/bijoykozhampurath/.hermes/hermes-agent
+      channel: stable

@@ -37,7 +37,8 @@ the model thinks. Use `max_tokens: 60` and read `reasoning_content`, not `conten
 |-------|:---------:|----------|
 | `qwen3.5-4b-mlx` | yes | web_extract, triage_specifier, kanban_decomposer |
 | `lfm2.5-2.6b-mlx` | yes | approval (kept thinking on purpose) |
-| `lfm2.5-vl-3b-mlx` | no  | vision, title_generation, profile_describer |
+| `lfm2.5-vl-3b-mlx` | no  | title_generation, profile_describer (was vision until qwen3-vl-8b-instruct-mlx swap) |
+| `qwen3-vl-8b-instruct-mlx` | no  | vision (8B Qwen3-VL 4bit MLX; natively non-thinking, no reasoning pass per screenshot) |
 
 Implication for aux slots: `lfm2.5-vl-3b-mlx` is the only non-thinking local
 model in this family. When the user wanted thinking OFF for title/profile but
@@ -99,3 +100,40 @@ Thinking is a property of the **model identity**, not the request. Two working p
 thinking states, you MUST split them across model identities (thinking model vs
 non-thinking virtual model). A single `lfm2.5-2.6b-mlx` instance cannot serve
 one slot thinking and another non-thinking.
+
+## Loading a non-resident model to probe it (LM Studio memory guardrail)
+
+The probe recipe above assumes the target model is already resident in memory.
+If it isn't, `/v1/chat/completions` returns:
+`Failed to load model "X": ... insufficient system resources. Continuing to
+load the model would likely overload your system and cause it to freeze.`
+LM Studio's memory guardrail refuses to JIT-load a big model while others
+occupy VRAM/RAM. Free memory first via the native v1 REST API.
+
+**Native v1 REST API (NOT the OpenAI-compatible `/v1/...` paths):**
+- List + find residents: `GET /api/v1/models` — each model carries
+  `loaded_instances: []` (unloaded) or `[{instance_id: "<key>"}]` (resident).
+  `instance_id` equals the model key.
+- Load:   `POST /api/v1/models/load`   with `{"model":"<key>","echo_load_config":true}`
+- Unload: `POST /api/v1/models/unload` with `{"instance_id":"<key>"}`
+
+**Endpoints that DO NOT work (return "Unexpected endpoint or method"):**
+`POST /v1/model/load`, `POST /v1/model/unload`, `DELETE /v1/models/<key>`,
+`GET /api/v1/models/loaded`. Use the `/api/v1/models/load|unload` forms above.
+
+**Non-destructive probe discipline:** snapshot the resident set before unloading,
+then restore it afterward. Unloading to make room can evict a model the user's
+other aux slots depend on — e.g. unloading residents to load an 8B evicted
+`qwen3.5-4b-mlx`, which backs `web_extract` / `triage_specifier` /
+`kanban_decomposer`; leaving it unloaded silently degrades those slots.
+1. `GET /api/v1/models` → record every key with non-empty `loaded_instances`.
+2. `POST /api/v1/models/unload` for each resident (to free memory for the probe).
+3. Load the probe target, run the probe, read `reasoning_content`.
+4. Unload the probe target, `POST /api/v1/models/load` every originally-resident model.
+5. Re-verify with `GET /api/v1/models` that the resident set matches step 1.
+
+## Verified addendum (this user's config, probed 2026-08)
+
+| Model | Thinking? | Notes |
+|-------|:---------:|-------|
+| `qwen3-vl-8b-instruct-mlx` | no | 8B Qwen3-VL 4bit MLX. Probe returned `content:'HELLO'`, empty `reasoning_content`, `finish_reason:stop`. Non-thinking natively — good vision slot pick, no reasoning pass per screenshot. Won't sit resident alongside 3+ other models (memory guardrail); JIT-loads and evicts a resident on first vision call. |

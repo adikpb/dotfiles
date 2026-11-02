@@ -11,6 +11,8 @@ tags: [reporting, screenshots, docx, documentation, web-capture, browser-vision]
 
 Create documents and reports that include web UI screenshots — dashboard states, modal dialogs, tabbed views, and filtered data — by combining JS patching, headless browser capture, and docx-js embedding.
 
+**Markdown → PDF legibility:** when delivering a text report as PDF via `pandoc → docx → soffice`, two bugs garble the output — paragraphs collapse into one line, and pipe tables get crushed. Both fixes (two-space hard breaks + `hard_line_breaks`; fixed-width docx post-process for tables) are in `references/markdown-pdf-legibility.md`. Apply before handing any Markdown-derived PDF to a human.
+
 ## When to Use
 
 Use this skill when the user asks to:

@@ -1,6 +1,6 @@
 ---
 name: opencode
-description: "Use OpenCode CLI, team agents, and crash recovery."
+description: "Delegate coding to OpenCode CLI (features, PR review)."
 version: 1.2.0
 author: Hermes Agent
 license: MIT
@@ -8,7 +8,7 @@ platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [Coding-Agent, OpenCode, Autonomous, Refactoring, Code-Review]
-    related_skills: [claude-code, codex, hermes-agent, opencode-setup]
+    related_skills: [claude-code, codex, hermes-agent]
 ---
 
 # OpenCode CLI
@@ -166,8 +166,8 @@ terminal(command="REVIEW=$(mktemp -d) && git clone https://github.com/user/repo.
 Use separate workdirs/worktrees to avoid collisions:
 
 ```
-terminal(command="opencode run 'Fix issue #101 and commit'", workdir="/tmp/issue-101", background=true, pty=true)
-terminal(command="opencode run 'Add parser regression tests and commit'", workdir="/tmp/issue-102", background=true, pty=true)
+terminal(command="opencode run 'Fix issue #101 and commit'", workdir="~/.hermes/cache/scratch/issue-101", background=true, pty=true)
+terminal(command="opencode run 'Add parser regression tests and commit'", workdir="~/.hermes/cache/scratch/issue-102", background=true, pty=true)
 process(action="list")
 ```
 
@@ -188,44 +188,13 @@ terminal(command="opencode stats --days 7 --models anthropic/claude-sonnet-4")
 
 ## Pitfalls
 
-- Non-interactive `opencode run` ABORTS when any permission prompt fires (e.g. `external_directory` for files outside the repo, or commands not on the bash allowlist) — it cannot answer asks. Use `--auto` (auto-approve permissions not explicitly denied) for autonomous runs, or keep all inputs inside the repo and pre-allow the commands.
 - Interactive `opencode` (TUI) sessions require `pty=true`. The `opencode run` command does NOT need pty.
 - `/exit` is NOT a valid command — it opens an agent selector. Use Ctrl+C to exit the TUI.
 - PATH mismatch can select the wrong OpenCode binary/model config.
-- TUI startup can hang on the "MCP /status" spinner (spinner keeps animating, input swallows submits, no filesystem activity). If `process(action="poll"|"log")` shows this for >60s, don't fight it: kill the session and fall back to `opencode run --auto '...'` for the bounded task — it skips the TUI and executes the same plugin workflow non-interactively.
 - If OpenCode appears stuck, inspect logs before killing:
   - `process(action="log", session_id="<id>")`
 - Avoid sharing one working directory across parallel OpenCode sessions.
 - Enter may need to be pressed twice to submit in the TUI (once to finalize text, once to send).
-
-## This machine's team (oh-my-opencode-slim)
-
-OpenCode here runs the oh-my-opencode-slim plugin: an Orchestrator plans, dispatches specialists (Explorer, Librarian, Oracle, Fixer) as background tasks, reconciles, and verifies. Config is symlinked from dotfiles into `~/.config/opencode/`. Built-in `explore`/`general` are disabled; `preset: "free"`; `designer` and `council` are disabled (route those to `@oracle`); `websearch` MCP is disabled (built-in websearch covers it).
-
-Do not over-specify and do not route manually — the orchestrator owns the work graph. `@agent <task>` is optional force-routing. Heavy work: `/deepwork` or a worktree lane. Unfamiliar repos: `run codemap` first. Exit TUI with Ctrl+C, never `/exit`.
-
-Full local setup, command table, and pitfalls: `references/opencode-team.md`.
-
-## Multi-agent recovery and dispatch
-
-When an orchestrator dies with background fixers active, do **not** blindly resume the TUI (it wedges on dead process locks). `pkill -f opencode`, then drive via persistent serve + attach:
-
-```
-opencode serve --port 4199 &
-opencode run -s <session_id> --attach http://localhost:4199 --auto "<prompt>"
-```
-
-`opencode run` exits when the parent turn completes — a dispatcher prompt that says "reconcile later" returns EXIT 0 while lanes still run. A clean exit is not evidence the deliverable exists. Recover lane text from `~/.local/share/opencode/opencode.db` (`session` / `message` / `part`). For one-shot runs, put this block at the top of the prompt (validated: runs with it finished; identical tasks without it died at a lane-wait):
-
-```
-HARD CONSTRAINT: Do NOT spawn background subagents or explorer lanes. Do NOT
-parallelize. Do NOT block on wait_for_user or any out-of-band input. Work
-directly and sequentially in this single session from start to finish.
-```
-
-Free-tier rate-limit hang: last log line is `AI_APICallError: Rate limit exceeded` then hours of silence with the process alive. Kill and resume with committed hashes + in-flight files listed; do not restart from scratch.
-
-Full recovery, dispatch template, and rate-limit recipe: `references/opencode-agent-orchestration.md`, `references/opencode-run-abandonment.md`, `references/implementation-dispatch-template.md`, `references/rate-limit-recovery.md`.
 
 ## Verification
 
