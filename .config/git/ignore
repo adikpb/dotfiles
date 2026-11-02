@@ -30,3 +30,6 @@ Temporary Items
 ### macOS Patch ###
 # iCloud generated files
 *.icloud
+# Qoder local files (private, not committed)
+AGENTS.local.md
+*.local.md
