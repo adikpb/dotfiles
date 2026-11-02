@@ -1,3 +1,5 @@
 # Repo-local Hermes plans must not land in ~/.hermes/plans
 \.hermes/plans
 \.DS_Store
+\.git*
+\.editorconfig
