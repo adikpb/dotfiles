@@ -1,39 +1,129 @@
 {
-    "$schema": "https://raw.githubusercontent.com/alvinunreal/oh-my-opencode-slim/refs/heads/master/oh-my-opencode-slim.schema.json",
-    "preset": "free",
-    "presets": {
-        "free": {
-            "orchestrator": {
-                "model": "opencode/deepseek-v4-flash-free"
-            },
-            "oracle": {
-                "model": "opencode/big-pickle",
-                "variant": "max"
-            },
-            "explorer": {
-                "model": "opencode/deepseek-v4-flash-free"
-            },
-            "librarian": {
-                "model": "opencode/deepseek-v4-flash-free"
-            },
-            "designer": {
-                "model": "opencode/mimo-v2.5-free",
-                "variant": "medium"
-            },
-            "fixer": {
-                "model": "opencode/laguna-s-2.1-free",
-                "variant": "high"
-            },
-            "observer": {
-                "model": "opencode/mimo-v2.5-free",
-                "variant": "low"
-            }
-        }
+  "$schema": "https://raw.githubusercontent.com/alvinunreal/oh-my-opencode-slim/refs/heads/master/oh-my-opencode-slim.schema.json",
+  "preset": "opencode-go-free",
+  "presets": {
+    "opencode-go": {
+      "orchestrator": {
+        "model": "opencode-go/deepseek-v4.1-flash"
+      },
+      "oracle": {
+        "model": "opencode-go/glm-5.3-flash",
+        "variant": "high"
+      },
+      "explorer": {
+        "model": "opencode-go/beam-free"
+      },
+      "librarian": {
+        "model": "opencode-go/beam-free"
+      },
+      "designer": {
+        "model": "opencode-go/deepseek-v4.1-flash"
+      },
+      "fixer": {
+        "model": "opencode-go/deepseek-v4.1-flash"
+      }
     },
-
-    "disabled_agents": ["council"],
-    "autoUpdate": false,
-    "multiplexer": {
-        "type": "auto"
+    "opencode-go-free": {
+      "orchestrator": {
+        "model": "opencode-go/beam-free"
+      },
+      "oracle": {
+        "model": "opencode-go/beam-free"
+      },
+      "explorer": {
+        "model": "opencode-go/beam-free"
+      },
+      "librarian": {
+        "model": "opencode-go/beam-free"
+      },
+      "designer": {
+        "model": "opencode-go/beam-free"
+      },
+      "fixer": {
+        "model": "opencode-go/beam-free"
+      }
+    },
+    "opencode-free": {
+      "orchestrator": {
+        "model": "opencode/deepseek-v4.1-flash-free"
+      },
+      "oracle": {
+        "model": "opencode/glm-5.3-flash-free",
+        "variant": "high"
+      },
+      "explorer": {
+        "model": "opencode/beam-free"
+      },
+      "librarian": {
+        "model": "opencode/beam-free"
+      },
+      "designer": {
+        "model": "opencode/deepseek-v4.1-flash-free"
+      },
+      "fixer": {
+        "model": "opencode/deepseek-v4.1-flash-free"
+      }
     }
+  },
+  "disabled_agents": [
+    "council",
+    "observer"
+  ],
+  "autoUpdate": false,
+  "multiplexer": {
+    "type": "auto"
+  },
+  "agents": {
+    "oracle": {
+      "skills_add": [
+        "code-review",
+        "codebase-design",
+        "diagnosing-bugs",
+        "domain-modeling",
+        "verification-planning"
+      ],
+      "permission": {
+        "task": "allow"
+      }
+    },
+    "fixer": {
+      "skills_add": [
+        "tdd",
+        "pr",
+        "simplify",
+        "verification-planning",
+        "prototype"
+      ],
+      "permission": {
+        "task": "deny"
+      }
+    },
+    "librarian": {
+      "skills_add": [
+        "research",
+        "clonedeps"
+      ],
+      "permission": {
+        "task": "deny"
+      }
+    },
+    "explorer": {
+      "skills_add": [
+        "codemap"
+      ],
+      "permission": {
+        "task": "deny"
+      }
+    },
+    "designer": {
+      "skills_add": [
+        "prototype",
+        "impeccable",
+        "agent-browser"
+      ],
+      "permission": {
+        "task": "allow"
+      }
+    }
+  }
 }
