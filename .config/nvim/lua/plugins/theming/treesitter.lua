@@ -18,7 +18,6 @@ return {
       "lua",
       "markdown",
       "markdown_inline",
-      "norg",
       "python",
       "regex",
       "rust",

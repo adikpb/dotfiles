@@ -17,7 +17,7 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous: Cursor in Middle During Se
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Copy to Clipboard" })
 
 -- Delete to void in either Visual or Normal mode
--- vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete to Void" })
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "Delete to Void" })
 
 -- Prevent `Q` presses in Normal mode
 vim.keymap.set("n", "Q", "<nop>")

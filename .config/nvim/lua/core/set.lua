@@ -21,8 +21,9 @@ vim.opt.mousemoveevent = true
 vim.o.winborder = "rounded"
 
 vim.g.loaded_node_provider = 0
-vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
+vim.g.loaded_python_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 -- https://github.com/Wansmer/nvim-config/blob/9f1bc81e32eb32000bad80f9912238 f
 -- 9e36a903a/lua/modules/key_listener.lua

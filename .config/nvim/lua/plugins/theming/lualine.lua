@@ -25,25 +25,15 @@ return {
           end,
         },
       },
-      lualine_b = {
+      lualine_x = { "encoding", "fileformat" },
+      lualine_y = {
         {
-          function()
-            return "rec. @" .. vim.fn.reg_recording()
-          end,
-          cond = function()
-            return vim.fn.reg_recording() ~= ""
+          "searchcount",
+          fmt = function(count)
+            return count ~= "[0/0]" and count or ""
           end,
         },
-        "diff",
-        "diagnostics",
       },
-      lualine_x = { "encoding", "fileformat" },
-      lualine_y = { {
-        "searchcount",
-        fmt = function(count)
-          return count ~= "[0/0]" and count or ""
-        end,
-      } },
     },
   },
 }
