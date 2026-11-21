@@ -3,3 +3,5 @@
 \.DS_Store
 \.git*
 \.editorconfig
+# The TUI rewrites its own CLI settings at runtime, so this file stays machine-local
+\.config/opencode/cli\.json

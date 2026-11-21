@@ -1,200 +1,216 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-  "experimental": {
-    "subagent_depth": 2
-  },
-  "plugins": [
-    "@tarquinen/opencode-dcp@latest",
-    "cc-safety-net@latest",
-    "./plugins/oh-my-opencode-slim",
-    "~/Documents/Github/personal/opencode-scratchpad"
-  ],
-  "permissions": [
-    {
-      "action": "shell",
-      "resource": "*",
-      "effect": "ask"
+    "$schema": "https://opencode.ai/config.json",
+    "experimental": {
+        "subagent_depth": 2
     },
-    {
-      "action": "shell",
-      "resource": ".venv/bin/python *",
-      "effect": "allow"
+    "plugins": [
+        "oh-my-opencode-slim@latest",
+        "@slkiser/opencode-quota",
+        "@tarquinen/opencode-dcp@latest",
+        "cc-safety-net@latest"
+    ],
+    "permissions": [
+        {
+            "action": "shell",
+            "resource": "*",
+            "effect": "ask"
+        },
+        {
+            "action": "shell",
+            "resource": ".venv/bin/python *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "awk *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "bun *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "bun run *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "bun run check:ci",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "bun run check *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "bun test *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "bunx biome *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "cat *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "cp *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "date *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "echo *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "echo",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "find *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "gh *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "git *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "grep *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "head *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "ls *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "mkdir *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "mv *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "pwd",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "pytest *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "python -m pytest *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "rg *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "ruff *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "sed *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "stat *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "tail *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "tail -f *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "touch *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "uv run pytest *",
+            "effect": "allow"
+        },
+        {
+            "action": "shell",
+            "resource": "wc *",
+            "effect": "allow"
+        }
+    ],
+    "agents": {
+        "build": {
+            "disabled": true
+        },
+        "explore": {
+            "disabled": true
+        },
+        "general": {
+            "disabled": true
+        },
+        "plan": {
+            "disabled": true
+        }
     },
-    {
-      "action": "shell",
-      "resource": "awk *",
-      "effect": "allow"
+    "formatter": true,
+    "worktree": {
+        "directory": "./.slim"
     },
-    {
-      "action": "shell",
-      "resource": "bun *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "bun run *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "bun run check:ci",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "bun run check *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "bun test *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "bunx biome *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "cat *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "cp *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "date *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "echo *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "echo",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "find *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "gh *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "git *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "grep *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "head *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "ls *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "mkdir *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "mv *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "pwd",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "pytest *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "python -m pytest *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "rg *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "ruff *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "sed *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "stat *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "tail *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "tail -f *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "touch *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "uv run pytest *",
-      "effect": "allow"
-    },
-    {
-      "action": "shell",
-      "resource": "wc *",
-      "effect": "allow"
+    "mcp": {
+        "servers": {
+            "browse": {
+                "type": "local",
+                "command": [
+                    "/Users/bijoykozhampurath/.local/bin/browse",
+                    "mcp"
+                ],
+                "environment": {
+                    "OPENCODE_BROWSER_RUNTIME": "auto-update"
+                }
+            }
+        }
     }
-  ],
-  "agents": {
-    "build": {
-      "disabled": true
-    },
-    "explore": {
-      "disabled": true
-    },
-    "general": {
-      "disabled": true
-    },
-    "plan": {
-      "disabled": true
-    }
-  },
-  "formatter": true,
-  "worktree": { "directory": "./.slim" }
 }
